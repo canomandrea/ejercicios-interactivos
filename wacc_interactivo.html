@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WACC Interactivo — Costo Promedio Ponderado de Capital</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f4f8; color: #1a1a2e; }
+  a.back { display:inline-block; color:white; opacity:.85; font-size:13px; text-decoration:none; margin-bottom:10px; }
+  a.back:hover { text-decoration:underline; }
+  .header { background: linear-gradient(135deg, #1F3864 0%, #2F75B6 100%); color: white; padding: 28px 40px; text-align: center; }
+  .header h1 { font-size: 26px; font-weight: 700; margin-bottom: 6px; }
+  .header h2 { font-size: 14px; font-weight: 400; opacity: .85; }
+  .container { max-width: 1100px; margin: 0 auto; padding: 24px 20px; }
+  .grid-main { display: grid; grid-template-columns: 340px 1fr; gap: 20px; align-items:start; }
+  @media (max-width: 900px) { .grid-main { grid-template-columns: 1fr; } }
+  .panel { background: white; border-radius: 12px; padding: 22px; box-shadow: 0 2px 8px rgba(0,0,0,.08); margin-bottom:20px; }
+  .panel h3 { font-size: 15px; font-weight: 700; color: #1F3864; margin-bottom: 16px; }
+  .field { margin-bottom: 18px; }
+  .field label { display:flex; justify-content:space-between; font-size:12px; font-weight:600; color:#333; margin-bottom:6px; }
+  .field label span.val { color:#2F75B6; font-weight:800; }
+  .field input[type=range] { width:100%; accent-color:#2F75B6; }
+  .formula-box { background:#f8f9fa; border-left:4px solid #2F75B6; border-radius:8px; padding:14px 16px; font-size:14px; margin-bottom:12px; }
+  .metric-card { background: white; border-radius: 12px; padding: 22px; box-shadow: 0 2px 8px rgba(0,0,0,.08); text-align:center; margin-bottom:20px; }
+  .metric-value { font-size: 40px; font-weight: 800; color:#1E8449; }
+  .metric-label { font-size:12px; color:#666; margin-top:6px; }
+  .metrics-row { display:flex; gap:16px; margin-bottom:20px; flex-wrap:wrap; }
+  .metric-card.small { flex:1; min-width:140px; padding:16px; }
+  .metric-card.small .metric-value { font-size:22px; color:#1F3864; }
+  .chart-card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,.08); margin-bottom:20px; }
+  .chart-card h3 { font-size: 15px; font-weight: 700; color: #1F3864; margin-bottom: 14px; }
+  .chart-wrapper { position: relative; height: 280px; }
+  table { width:100%; border-collapse:collapse; font-size:12px; }
+  th, td { padding:8px 6px; text-align:right; border-bottom:1px solid #eee; }
+  th:first-child, td:first-child { text-align:left; }
+  th { color:#1F3864; font-size:11px; text-transform:uppercase; }
+  .note { background:#EBF5FB; border:1px solid #AED6F1; border-radius:8px; padding:10px 14px; font-size:11.5px; color:#1A5276; line-height:1.5; margin-bottom:16px; }
+</style>
+</head>
+<body>
+<div class="header">
+  <a class="back" href="index.html">← Volver al menú</a>
+  <h1>WACC — Costo Promedio Ponderado de Capital</h1>
+  <h2>Ejercicio interactivo — estructura de capital óptima y su efecto en el WACC</h2>
+</div>
+
+<div class="container">
+  <div class="note">Modelo: WACC = We × Ke + Wd × Kd × (1−t). We y Wd son los pesos de equity y deuda a valores de mercado (We + Wd = 100%).</div>
+
+  <div class="grid-main">
+    <div>
+      <div class="panel">
+        <h3>Estructura de capital</h3>
+        <div class="field"><label>Deuda / Capital total (D/V) <span class="val" id="v_wd">30%</span></label>
+          <input type="range" id="wd" min="0" max="90" step="1" value="30"></div>
+      </div>
+      <div class="panel">
+        <h3>Costos de financiamiento</h3>
+        <div class="field"><label>Costo de la deuda pre-tax (Kd) <span class="val" id="v_kd">7%</span></label>
+          <input type="range" id="kd" min="0" max="20" step="0.25" value="7"></div>
+        <div class="field"><label>Tasa impositiva (t) <span class="val" id="v_tax">30%</span></label>
+          <input type="range" id="tax" min="0" max="45" step="1" value="30"></div>
+        <div class="field"><label>Costo del equity (Ke) <span class="val" id="v_ke">14%</span></label>
+          <input type="range" id="ke" min="0" max="30" step="0.25" value="14"></div>
+        <p style="font-size:11px;color:#888;">Tip: Ke suele estimarse con CAPM. Probá con distintos valores de β en el ejercicio de CAPM.</p>
+      </div>
+    </div>
+
+    <div>
+      <div class="metric-card">
+        <div class="metric-value" id="m_wacc">-</div>
+        <div class="metric-label">WACC — Costo Promedio Ponderado de Capital</div>
+      </div>
+
+      <div class="metrics-row">
+        <div class="metric-card small"><div class="metric-value" id="m_we">-</div><div class="metric-label">Peso Equity (We)</div></div>
+        <div class="metric-card small"><div class="metric-value" id="m_wd2">-</div><div class="metric-label">Peso Deuda (Wd)</div></div>
+        <div class="metric-card small"><div class="metric-value" id="m_kdaftertax">-</div><div class="metric-label">Kd después de impuestos</div></div>
+        <div class="metric-card small"><div class="metric-value" id="m_shield">-</div><div class="metric-label">Escudo fiscal (pp)</div></div>
+      </div>
+
+      <div class="chart-card">
+        <h3>WACC vs. Nivel de Endeudamiento (D/V)</h3>
+        <div class="chart-wrapper"><canvas id="chartWacc"></canvas></div>
+      </div>
+
+      <div class="chart-card">
+        <h3>Composición del costo de capital</h3>
+        <table id="tblComp"><thead><tr><th>Componente</th><th>Peso</th><th>Costo</th><th>Contribución al WACC</th></tr></thead><tbody></tbody></table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const ids = ['wd','kd','tax','ke'];
+function readInputs(){ const o={}; ids.forEach(id=>o[id]=parseFloat(document.getElementById(id).value)); return o; }
+let chartWacc;
+
+function waccOf(wd, kd, tax, ke){
+  const we = 100-wd;
+  return (we/100)*ke + (wd/100)*kd*(1-tax/100);
+}
+
+function render(){
+  const o = readInputs();
+  document.getElementById('v_wd').textContent = o.wd+'%';
+  document.getElementById('v_kd').textContent = o.kd+'%';
+  document.getElementById('v_tax').textContent = o.tax+'%';
+  document.getElementById('v_ke').textContent = o.ke+'%';
+
+  const we = 100-o.wd;
+  const kdAfterTax = o.kd*(1-o.tax/100);
+  const wacc = waccOf(o.wd, o.kd, o.tax, o.ke);
+
+  document.getElementById('m_wacc').textContent = wacc.toFixed(2)+'%';
+  document.getElementById('m_we').textContent = we+'%';
+  document.getElementById('m_wd2').textContent = o.wd+'%';
+  document.getElementById('m_kdaftertax').textContent = kdAfterTax.toFixed(2)+'%';
+  document.getElementById('m_shield').textContent = (o.kd-kdAfterTax).toFixed(2)+'pp';
+
+  const html = [
+    ['Equity', we+'%', o.ke.toFixed(2)+'%', ((we/100)*o.ke).toFixed(2)+'%'],
+    ['Deuda (después de imp.)', o.wd+'%', kdAfterTax.toFixed(2)+'%', ((o.wd/100)*kdAfterTax).toFixed(2)+'%'],
+  ].map(r=>'<tr><td>'+r[0]+'</td><td>'+r[1]+'</td><td>'+r[2]+'</td><td><b>'+r[3]+'</b></td></tr>').join('');
+  document.querySelector('#tblComp tbody').innerHTML = html + '<tr><td><b>WACC</b></td><td></td><td></td><td><b>'+wacc.toFixed(2)+'%</b></td></tr>';
+
+  const wdRange = []; for(let w=0;w<=90;w+=5) wdRange.push(w);
+  const waccData = wdRange.map(w=>waccOf(w,o.kd,o.tax,o.ke));
+
+  if(chartWacc) chartWacc.destroy();
+  chartWacc = new Chart(document.getElementById('chartWacc'), {
+    type:'line',
+    data:{ labels:wdRange.map(w=>w+'%'), datasets:[{ label:'WACC', data:waccData, borderColor:'#2F75B6', backgroundColor:'rgba(47,117,182,.15)', fill:true, tension:.3, pointRadius:2 }] },
+    options:{ responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{ x:{title:{display:true,text:'Deuda / Capital Total (D/V)'}}, y:{title:{display:true,text:'WACC (%)'}} } }
+  });
+}
+
+ids.forEach(id => document.getElementById(id).addEventListener('input', render));
+render();
+</script>
+</body>
+</html>

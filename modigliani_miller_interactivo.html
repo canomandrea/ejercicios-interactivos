@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Modigliani-Miller Interactivo — Estructura de Capital</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f4f8; color: #1a1a2e; }
+  a.back { display:inline-block; color:white; opacity:.85; font-size:13px; text-decoration:none; margin-bottom:10px; }
+  a.back:hover { text-decoration:underline; }
+  .header { background: linear-gradient(135deg, #1F3864 0%, #2F75B6 100%); color: white; padding: 28px 40px; text-align: center; }
+  .header h1 { font-size: 26px; font-weight: 700; margin-bottom: 6px; }
+  .header h2 { font-size: 14px; font-weight: 400; opacity: .85; }
+  .container { max-width: 1200px; margin: 0 auto; padding: 24px 20px; }
+  .grid-main { display: grid; grid-template-columns: 340px 1fr; gap: 20px; align-items:start; }
+  @media (max-width: 900px) { .grid-main { grid-template-columns: 1fr; } }
+  .panel { background: white; border-radius: 12px; padding: 22px; box-shadow: 0 2px 8px rgba(0,0,0,.08); margin-bottom:20px; }
+  .panel h3 { font-size: 15px; font-weight: 700; color: #1F3864; margin-bottom: 16px; }
+  .field { margin-bottom: 18px; }
+  .field label { display:flex; justify-content:space-between; font-size:12px; font-weight:600; color:#333; margin-bottom:6px; }
+  .field label span.val { color:#2F75B6; font-weight:800; }
+  .field input[type=range] { width:100%; accent-color:#2F75B6; }
+  .toggle-row { display:flex; gap:8px; margin-bottom:18px; }
+  .toggle-btn { flex:1; padding:10px; border-radius:8px; border:2px solid #2F75B6; background:white; color:#2F75B6; font-weight:700; font-size:12px; cursor:pointer; }
+  .toggle-btn.active { background:#2F75B6; color:white; }
+  .metrics-row { display: flex; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
+  .metric-card { flex: 1; min-width: 150px; background: white; border-radius: 12px; padding: 16px 18px; box-shadow: 0 2px 8px rgba(0,0,0,.08); border-top: 4px solid #2F75B6; text-align: center; }
+  .metric-card.green { border-top-color:#1E8449; } .metric-card.orange { border-top-color:#D35400; } .metric-card.red { border-top-color:#C0392B; }
+  .metric-value { font-size: 24px; font-weight: 800; color: #1F3864; }
+  .metric-value.green{color:#1E8449;} .metric-value.orange{color:#D35400;} .metric-value.red{color:#C0392B;}
+  .metric-label { font-size: 11px; color: #666; margin-top: 4px; }
+  .chart-card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,.08); margin-bottom: 20px; }
+  .chart-card h3 { font-size: 15px; font-weight: 700; color: #1F3864; margin-bottom: 14px; }
+  .chart-wrapper { position: relative; height: 280px; }
+  .note { background:#EBF5FB; border:1px solid #AED6F1; border-radius:8px; padding:10px 14px; font-size:11.5px; color:#1A5276; line-height:1.5; margin-bottom:16px; }
+  .formula-box { background:#f8f9fa; border-left:4px solid #2F75B6; border-radius:8px; padding:12px 14px; font-size:13px; margin-bottom:10px; }
+</style>
+</head>
+<body>
+<div class="header">
+  <a class="back" href="index.html">← Volver al menú</a>
+  <h1>Modigliani &amp; Miller — Estructura de Capital</h1>
+  <h2>Ejercicio interactivo — Proposiciones I y II, con y sin impuestos</h2>
+</div>
+
+<div class="container">
+  <div class="note">Sin impuestos: VL = VU y Ke = Ku + (Ku−Kd)×(D/E). Con impuestos corporativos: VL = VU + t×D y Ke = Ku + (Ku−Kd)×(1−t)×(D/E). El escudo fiscal de la deuda genera valor cuando hay impuestos.</div>
+
+  <div class="grid-main">
+    <div>
+      <div class="panel">
+        <h3>Escenario</h3>
+        <div class="toggle-row">
+          <button class="toggle-btn active" id="btnNoTax" onclick="setScenario(false)">Sin Impuestos</button>
+          <button class="toggle-btn" id="btnTax" onclick="setScenario(true)">Con Impuestos</button>
+        </div>
+      </div>
+      <div class="panel">
+        <h3>Supuestos de la firma</h3>
+        <div class="field"><label>Valor de la firma sin deuda (VU, M) <span class="val" id="v_vu">1,000</span></label>
+          <input type="range" id="vu" min="200" max="3000" step="50" value="1000"></div>
+        <div class="field"><label>Costo del equity desapalancado (Ku) <span class="val" id="v_ku">12%</span></label>
+          <input type="range" id="ku" min="4" max="25" step="0.25" value="12"></div>
+        <div class="field"><label>Costo de la deuda (Kd) <span class="val" id="v_kd">6%</span></label>
+          <input type="range" id="kd" min="0" max="18" step="0.25" value="6"></div>
+        <div class="field"><label>Tasa impositiva (t) <span class="val" id="v_tax">30%</span></label>
+          <input type="range" id="tax" min="0" max="45" step="1" value="30"></div>
+        <div class="field"><label>Deuda emitida (D, M) <span class="val" id="v_debt">300</span></label>
+          <input type="range" id="debt" min="0" max="2500" step="25" value="300"></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="metrics-row">
+        <div class="metric-card"><div class="metric-value" id="m_vl">-</div><div class="metric-label">Valor de la firma apalancada (VL)</div></div>
+        <div class="metric-card orange"><div class="metric-value orange" id="m_taxshield">-</div><div class="metric-label">Valor del escudo fiscal (t×D)</div></div>
+        <div class="metric-card green"><div class="metric-value green" id="m_ke">-</div><div class="metric-label">Costo del Equity apalancado (Ke)</div></div>
+        <div class="metric-card" style="border-top-color:#6C3483"><div class="metric-value" style="color:#6C3483" id="m_wacc">-</div><div class="metric-label">WACC resultante</div></div>
+      </div>
+
+      <div class="chart-card">
+        <h3>Proposición I: Valor de la Firma según Nivel de Deuda</h3>
+        <div class="chart-wrapper"><canvas id="chartPropI"></canvas></div>
+      </div>
+
+      <div class="chart-card">
+        <h3>Proposición II: Ke y WACC según D/E</h3>
+        <div class="chart-wrapper"><canvas id="chartPropII"></canvas></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const ids = ['vu','ku','kd','tax','debt'];
+let withTax = false;
+let chartPropI, chartPropII;
+
+function setScenario(t){
+  withTax = t;
+  document.getElementById('btnNoTax').classList.toggle('active', !t);
+  document.getElementById('btnTax').classList.toggle('active', t);
+  render();
+}
+
+function readInputs(){ const o={}; ids.forEach(id=>o[id]=parseFloat(document.getElementById(id).value)); return o; }
+
+function firmValue(vu, tax, d, useTax){ return useTax ? vu + tax/100*d : vu; }
+
+function keOf(ku, kd, d, e, tax, useTax){
+  if(e<=0) return ku;
+  const de = d/e;
+  return useTax ? ku + (ku-kd)*(1-tax/100)*de : ku + (ku-kd)*de;
+}
+
+function waccOf(ke, kd, d, e, tax, useTax){
+  const v = d+e;
+  if(v<=0) return ke;
+  const we = e/v, wd = d/v;
+  return useTax ? we*ke + wd*kd*(1-tax/100) : we*ke + wd*kd;
+}
+
+function render(){
+  const o = readInputs();
+  document.getElementById('v_vu').textContent = o.vu.toLocaleString('es-AR');
+  document.getElementById('v_ku').textContent = o.ku+'%';
+  document.getElementById('v_kd').textContent = o.kd+'%';
+  document.getElementById('v_tax').textContent = o.tax+'%';
+  document.getElementById('v_debt').textContent = o.debt.toLocaleString('es-AR');
+  document.getElementById('tax').closest('.field').style.opacity = withTax ? 1 : 0.4;
+
+  const vl = firmValue(o.vu, o.tax, o.debt, withTax);
+  const e = vl - o.debt;
+  const ke = keOf(o.ku, o.kd, o.debt, e, o.tax, withTax);
+  const wacc = waccOf(ke, o.kd, o.debt, e, o.tax, withTax);
+  const taxShield = withTax ? o.tax/100*o.debt : 0;
+
+  document.getElementById('m_vl').textContent = vl.toLocaleString('es-AR',{maximumFractionDigits:0});
+  document.getElementById('m_taxshield').textContent = taxShield.toLocaleString('es-AR',{maximumFractionDigits:0});
+  document.getElementById('m_ke').textContent = ke.toFixed(2)+'%';
+  document.getElementById('m_wacc').textContent = wacc.toFixed(2)+'%';
+
+  // Prop I chart: firm value vs debt level
+  const debtRange = []; for(let d=0; d<=o.vu*1.5; d+=o.vu*1.5/20) debtRange.push(Math.round(d));
+  const vlNoTax = debtRange.map(d => o.vu);
+  const vlTax = debtRange.map(d => o.vu + o.tax/100*d);
+
+  if(chartPropI) chartPropI.destroy();
+  chartPropI = new Chart(document.getElementById('chartPropI'), {
+    type:'line',
+    data:{ labels: debtRange.map(d=>d.toLocaleString('es-AR')),
+      datasets:[
+        { label:'VL sin impuestos', data: vlNoTax, borderColor:'#2F75B6', borderDash:[6,4], pointRadius:0, borderWidth:2 },
+        { label:'VL con impuestos (VU + t×D)', data: vlTax, borderColor:'#D35400', pointRadius:0, borderWidth:3 },
+        { label:'Escenario actual', data: debtRange.map(d => Math.abs(d-o.debt) < (o.vu*1.5/20) ? (withTax? o.vu+o.tax/100*d : o.vu) : null), pointBackgroundColor:'#C0392B', pointRadius:8, showLine:false }
+      ]},
+    options:{ responsive:true, maintainAspectRatio:false, scales:{ x:{title:{display:true,text:'Deuda (D)'}}, y:{title:{display:true,text:'Valor de la Firma'}} } }
+  });
+
+  // Prop II chart: Ke and WACC vs D/E
+  const deRange = []; for(let de=0; de<=3; de+=0.15) deRange.push(de);
+  const keData = deRange.map(de => o.ku + (o.ku-o.kd)*(withTax?(1-o.tax/100):1)*de);
+  const waccData = deRange.map(de => {
+    const d_ = de, e_ = 1, v_ = d_+e_;
+    const ke_ = o.ku + (o.ku-o.kd)*(withTax?(1-o.tax/100):1)*de;
+    return withTax ? (e_/v_)*ke_ + (d_/v_)*o.kd*(1-o.tax/100) : (e_/v_)*ke_ + (d_/v_)*o.kd;
+  });
+  const currentDE = e>0 ? o.debt/e : 0;
+
+  if(chartPropII) chartPropII.destroy();
+  chartPropII = new Chart(document.getElementById('chartPropII'), {
+    type:'line',
+    data:{ labels: deRange.map(de=>de.toFixed(2)),
+      datasets:[
+        { label:'Ke (costo equity apalancado)', data:keData, borderColor:'#1E8449', pointRadius:0, borderWidth:3 },
+        { label:'WACC', data:waccData, borderColor:'#6C3483', pointRadius:0, borderWidth:3, borderDash:[4,3] },
+        { label:'Ku (constante)', data: deRange.map(()=>o.ku), borderColor:'#999', pointRadius:0, borderWidth:1.5, borderDash:[2,2] }
+      ]},
+    options:{ responsive:true, maintainAspectRatio:false, scales:{ x:{title:{display:true,text:'D/E'}}, y:{title:{display:true,text:'Tasa (%)'}} } }
+  });
+}
+
+ids.forEach(id => document.getElementById(id).addEventListener('input', render));
+render();
+</script>
+</body>
+</html>

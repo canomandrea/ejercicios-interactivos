@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Opciones Reales Interactivo — Valuación de Flexibilidad</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f4f8; color: #1a1a2e; }
+  a.back { display:inline-block; color:white; opacity:.85; font-size:13px; text-decoration:none; margin-bottom:10px; }
+  a.back:hover { text-decoration:underline; }
+  .header { background: linear-gradient(135deg, #1F3864 0%, #2F75B6 100%); color: white; padding: 28px 40px; text-align: center; }
+  .header h1 { font-size: 26px; font-weight: 700; margin-bottom: 6px; }
+  .header h2 { font-size: 14px; font-weight: 400; opacity: .85; }
+  .container { max-width: 1200px; margin: 0 auto; padding: 24px 20px; }
+  .grid-main { display: grid; grid-template-columns: 340px 1fr; gap: 20px; align-items:start; }
+  @media (max-width: 900px) { .grid-main { grid-template-columns: 1fr; } }
+  .panel { background: white; border-radius: 12px; padding: 22px; box-shadow: 0 2px 8px rgba(0,0,0,.08); margin-bottom:20px; }
+  .panel h3 { font-size: 15px; font-weight: 700; color: #1F3864; margin-bottom: 16px; }
+  .field { margin-bottom: 18px; }
+  .field label { display:flex; justify-content:space-between; font-size:12px; font-weight:600; color:#333; margin-bottom:6px; }
+  .field label span.val { color:#2F75B6; font-weight:800; }
+  .field input[type=range] { width:100%; accent-color:#2F75B6; }
+  .toggle-row { display:flex; gap:8px; margin-bottom:6px; }
+  .toggle-btn { flex:1; padding:10px 6px; border-radius:8px; border:2px solid #2F75B6; background:white; color:#2F75B6; font-weight:700; font-size:11px; cursor:pointer; }
+  .toggle-btn.active { background:#2F75B6; color:white; }
+  .metrics-row { display: flex; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
+  .metric-card { flex: 1; min-width: 150px; background: white; border-radius: 12px; padding: 16px 18px; box-shadow: 0 2px 8px rgba(0,0,0,.08); border-top: 4px solid #2F75B6; text-align: center; }
+  .metric-card.green { border-top-color:#1E8449; } .metric-card.orange { border-top-color:#D35400; } .metric-card.red { border-top-color:#C0392B; }
+  .metric-value { font-size: 22px; font-weight: 800; color: #1F3864; }
+  .metric-value.green{color:#1E8449;} .metric-value.orange{color:#D35400;} .metric-value.red{color:#C0392B;}
+  .metric-label { font-size: 11px; color: #666; margin-top: 4px; }
+  .chart-card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,.08); margin-bottom: 20px; }
+  .chart-card h3 { font-size: 15px; font-weight: 700; color: #1F3864; margin-bottom: 14px; }
+  .chart-wrapper { position: relative; height: 280px; }
+  table { width:100%; border-collapse:collapse; font-size:12px; }
+  th, td { padding:8px 6px; text-align:right; border-bottom:1px solid #eee; }
+  th:first-child, td:first-child { text-align:left; }
+  th { color:#1F3864; font-size:11px; text-transform:uppercase; }
+  .note { background:#EBF5FB; border:1px solid #AED6F1; border-radius:8px; padding:10px 14px; font-size:11.5px; color:#1A5276; line-height:1.5; margin-bottom:16px; }
+</style>
+</head>
+<body>
+<div class="header">
+  <a class="back" href="index.html">← Volver al menú</a>
+  <h1>Opciones Reales — Valuación de la Flexibilidad</h1>
+  <h2>Ejercicio interactivo — opción de expandir / diferir un proyecto (modelo Black-Scholes)</h2>
+</div>
+
+<div class="container">
+  <div class="note">La opción real se valúa como una call: S = VP de los flujos esperados del proyecto, K = inversión requerida (strike), σ = volatilidad del activo subyacente, T = tiempo hasta decidir, r = tasa libre de riesgo. Valor de la opción = S×N(d1) − K×e<sup>−rT</sup>×N(d2).</div>
+
+  <div class="grid-main">
+    <div>
+      <div class="panel">
+        <h3>Tipo de opción</h3>
+        <div class="toggle-row">
+          <button class="toggle-btn active" id="btnExpand" onclick="setType('expand')">Expandir</button>
+          <button class="toggle-btn" id="btnDefer" onclick="setType('defer')">Diferir</button>
+        </div>
+        <p style="font-size:11px;color:#888;margin-top:8px;">Ambas se modelan como una opción call sobre el proyecto.</p>
+      </div>
+      <div class="panel">
+        <h3>Supuestos del proyecto</h3>
+        <div class="field"><label>VP de flujos esperados (S, M) <span class="val" id="v_s">1,000</span></label>
+          <input type="range" id="s" min="100" max="3000" step="25" value="1000"></div>
+        <div class="field"><label>Inversión requerida (K, M) <span class="val" id="v_k">1,000</span></label>
+          <input type="range" id="k" min="100" max="3000" step="25" value="1000"></div>
+        <div class="field"><label>Volatilidad del proyecto (σ) <span class="val" id="v_sigma">35%</span></label>
+          <input type="range" id="sigma" min="5" max="90" step="1" value="35"></div>
+        <div class="field"><label>Plazo de decisión (T, años) <span class="val" id="v_t">3</span></label>
+          <input type="range" id="t" min="0.25" max="10" step="0.25" value="3"></div>
+        <div class="field"><label>Tasa libre de riesgo (r) <span class="val" id="v_r">4%</span></label>
+          <input type="range" id="r" min="0" max="12" step="0.25" value="4"></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="metrics-row">
+        <div class="metric-card"><div class="metric-value" id="m_npv">-</div><div class="metric-label">VAN estático (S − K)</div></div>
+        <div class="metric-card orange"><div class="metric-value orange" id="m_optval">-</div><div class="metric-label">Valor de la Opción Real</div></div>
+        <div class="metric-card green"><div class="metric-value green" id="m_evt">-</div><div class="metric-label">Valor Total (VAN + Flexibilidad)</div></div>
+        <div class="metric-card" style="border-top-color:#6C3483"><div class="metric-value" style="color:#6C3483" id="m_flexpct">-</div><div class="metric-label">% del valor por flexibilidad</div></div>
+      </div>
+
+      <div class="chart-card">
+        <h3>VAN Estático vs. Valor con Opción Real</h3>
+        <div class="chart-wrapper"><canvas id="chartCompare"></canvas></div>
+      </div>
+
+      <div class="chart-card">
+        <h3>Valor de la Opción según Volatilidad</h3>
+        <div class="chart-wrapper"><canvas id="chartVol"></canvas></div>
+      </div>
+
+      <div class="chart-card">
+        <h3>Detalle del cálculo (Black-Scholes)</h3>
+        <table id="tblDetail"><tbody></tbody></table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const ids = ['s','k','sigma','t','r'];
+let optType = 'expand';
+let chartCompare, chartVol;
+
+function setType(t){
+  optType = t;
+  document.getElementById('btnExpand').classList.toggle('active', t==='expand');
+  document.getElementById('btnDefer').classList.toggle('active', t==='defer');
+  render();
+}
+
+function readInputs(){ const o={}; ids.forEach(id=>o[id]=parseFloat(document.getElementById(id).value)); return o; }
+
+// Normal CDF approximation (Abramowitz-Stegun)
+function normCdf(x){
+  const t = 1/(1+0.2316419*Math.abs(x));
+  const d = 0.3989423*Math.exp(-x*x/2);
+  let p = d*t*(0.3193815+t*(-0.3565638+t*(1.781478+t*(-1.821256+t*1.330274))));
+  if(x>0) p = 1-p;
+  return p;
+}
+
+function blackScholesCall(S,K,sigma,T,r){
+  if(T<=0 || sigma<=0) return Math.max(S-K,0);
+  const d1 = (Math.log(S/K) + (r/100 + (sigma/100)**2/2)*T) / ((sigma/100)*Math.sqrt(T));
+  const d2 = d1 - (sigma/100)*Math.sqrt(T);
+  const call = S*normCdf(d1) - K*Math.exp(-(r/100)*T)*normCdf(d2);
+  return {call, d1, d2, Nd1:normCdf(d1), Nd2:normCdf(d2)};
+}
+
+function render(){
+  const o = readInputs();
+  document.getElementById('v_s').textContent = o.s.toLocaleString('es-AR');
+  document.getElementById('v_k').textContent = o.k.toLocaleString('es-AR');
+  document.getElementById('v_sigma').textContent = o.sigma+'%';
+  document.getElementById('v_t').textContent = o.t;
+  document.getElementById('v_r').textContent = o.r+'%';
+
+  const res = blackScholesCall(o.s, o.k, o.sigma, o.t, o.r);
+  const npv = o.s - o.k;
+  const totalValue = res.call;
+  const flexValue = totalValue - Math.max(npv,0);
+  const flexPct = totalValue>0 ? (flexValue/totalValue*100) : 0;
+
+  document.getElementById('m_npv').textContent = npv.toLocaleString('es-AR',{maximumFractionDigits:0});
+  document.getElementById('m_optval').textContent = totalValue.toLocaleString('es-AR',{maximumFractionDigits:0});
+  document.getElementById('m_evt').textContent = totalValue.toLocaleString('es-AR',{maximumFractionDigits:0});
+  document.getElementById('m_flexpct').textContent = flexPct.toFixed(1)+'%';
+
+  if(chartCompare) chartCompare.destroy();
+  chartCompare = new Chart(document.getElementById('chartCompare'), {
+    type:'bar',
+    data:{ labels:['VAN estático','Valor con Opción Real'], datasets:[{ data:[Math.max(npv,0), totalValue], backgroundColor:['#95A5A6','#D35400'], borderRadius:6 }] },
+    options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}} }
+  });
+
+  const volRange = []; for(let v=5;v<=90;v+=5) volRange.push(v);
+  const volData = volRange.map(v => blackScholesCall(o.s,o.k,v,o.t,o.r).call);
+
+  if(chartVol) chartVol.destroy();
+  chartVol = new Chart(document.getElementById('chartVol'), {
+    type:'line',
+    data:{ labels:volRange.map(v=>v+'%'), datasets:[
+      { label:'Valor de la opción', data:volData, borderColor:'#2F75B6', backgroundColor:'rgba(47,117,182,.15)', fill:true, tension:.3, pointRadius:0, borderWidth:3 },
+      { label:'Escenario actual', data:volRange.map(v=> Math.abs(v-o.sigma)<3 ? blackScholesCall(o.s,o.k,v,o.t,o.r).call : null), pointBackgroundColor:'#C0392B', pointRadius:7, showLine:false }
+    ]},
+    options:{ responsive:true, maintainAspectRatio:false, scales:{ x:{title:{display:true,text:'Volatilidad (σ)'}}, y:{title:{display:true,text:'Valor de la opción'}} } }
+  });
+
+  const rows = [
+    ['S (VP de flujos esperados)', o.s.toLocaleString('es-AR')],
+    ['K (inversión requerida)', o.k.toLocaleString('es-AR')],
+    ['d1', res.d1.toFixed(4)],
+    ['d2', res.d2.toFixed(4)],
+    ['N(d1)', res.Nd1.toFixed(4)],
+    ['N(d2)', res.Nd2.toFixed(4)],
+    ['Valor de la opción real', totalValue.toLocaleString('es-AR',{maximumFractionDigits:1})],
+  ];
+  document.querySelector('#tblDetail tbody').innerHTML = rows.map(r=>'<tr><td>'+r[0]+'</td><td>'+r[1]+'</td></tr>').join('');
+}
+
+ids.forEach(id => document.getElementById(id).addEventListener('input', render));
+render();
+</script>
+</body>
+</html>
