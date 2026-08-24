@@ -1,0 +1,409 @@
+<meta charset="UTF-8">
+<title>Caso Warf Computers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #FFFFFF;
+    --surface: #FFFFFF;
+    --surface-2: #F5F8F6;
+    --ink: #17262A;
+    --ink-soft: #52686B;
+    --ink-faint: #82989A;
+    --border: #DAE3DF;
+    --border-strong: #C2D0CB;
+    --accent: #1E6E68;
+    --accent-soft: #E4F0EE;
+    --accent-ink: #0F4642;
+    --gold: #A8752E;
+    --gold-soft: #F6ECDA;
+    --given: #3A5B8C;
+    --given-soft: #E7EDF7;
+    --serif: "Source Serif 4", Georgia, "Times New Roman", serif;
+    --sans: "Public Sans", -apple-system, "Segoe UI", sans-serif;
+    --mono: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+    --max: 780px;
+  }
+  /* Fondo blanco fijo, sin adaptación a modo oscuro. */
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+
+  .page {
+    max-width: var(--max);
+    margin: 0 auto;
+    padding: 0 24px 96px;
+  }
+
+  /* ---------- Header ---------- */
+  header.hero {
+    padding: 56px 0 34px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 40px;
+  }
+  .kicker {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent-ink);
+    background: var(--accent-soft);
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 3px;
+    margin-bottom: 18px;
+  }
+  h1 {
+    font-family: var(--serif);
+    font-weight: 700;
+    font-size: clamp(2rem, 5vw, 2.7rem);
+    line-height: 1.12;
+    margin: 0 0 12px;
+    text-wrap: balance;
+    color: var(--ink);
+  }
+  .dek {
+    font-size: 1.05rem;
+    color: var(--ink-soft);
+    max-width: 62ch;
+    margin: 0;
+  }
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 22px;
+    margin-top: 22px;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    color: var(--ink-soft);
+  }
+  .meta-row span b { color: var(--ink); font-weight: 600; }
+
+  /* ---------- Sections ---------- */
+  section { margin-bottom: 52px; }
+  .step {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 6px;
+  }
+  .step-num {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--accent);
+    background: var(--accent-soft);
+    border-radius: 50%;
+    width: 26px; height: 26px;
+    min-width: 26px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+  }
+  h2 {
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: 1.5rem;
+    margin: 0;
+    text-wrap: balance;
+  }
+  h3 {
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: 1.12rem;
+    margin: 28px 0 10px;
+    color: var(--ink);
+  }
+  .section-intro {
+    color: var(--ink-soft);
+    max-width: 68ch;
+    margin: 10px 0 22px 38px;
+  }
+  p { margin: 0 0 14px; }
+  .prose { max-width: 68ch; }
+
+  /* ---------- Legend ---------- */
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    padding: 14px 18px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin-bottom: 36px;
+  }
+  .legend-item { display: flex; align-items: center; gap: 8px; }
+  .swatch { width: 12px; height: 12px; border-radius: 3px; flex: none; }
+
+  /* ---------- Tables ---------- */
+  .table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--surface);
+    margin: 18px 0 8px;
+  }
+  table { width: 100%; border-collapse: collapse; min-width: 460px; }
+  caption { display: none; }
+  thead th {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    text-align: right;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border-strong);
+    background: var(--surface-2);
+  }
+  thead th:first-child { text-align: left; }
+  tbody td {
+    padding: 9px 16px;
+    border-bottom: 1px solid var(--border);
+    font-family: var(--mono);
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+    font-size: 14px;
+  }
+  tbody td:first-child {
+    font-family: var(--sans);
+    text-align: left;
+    color: var(--ink);
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  tr.subtotal td { font-weight: 600; background: var(--surface-2); }
+  tr.subtotal td:first-child { color: var(--ink); }
+  tr.total td {
+    font-weight: 700;
+    background: var(--accent-soft);
+    color: var(--accent-ink);
+    border-top: 1.5px solid var(--accent);
+  }
+  tr.group td:first-child {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    padding-top: 16px;
+  }
+  tr.given td:not(:first-child) { color: var(--given); }
+  td.check { color: var(--gold); font-weight: 600; }
+
+  /* ---------- Formula card ---------- */
+  .formula {
+    position: relative;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 4px 10px 10px 4px;
+    padding: 18px 22px;
+    margin: 16px 0 24px;
+  }
+  .formula .f-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+  .formula .f-def {
+    font-family: var(--serif);
+    font-style: italic;
+    color: var(--ink-soft);
+    font-size: 15px;
+    margin-bottom: 10px;
+  }
+  .formula .f-sub {
+    font-family: var(--mono);
+    font-size: 15px;
+    color: var(--ink);
+    overflow-x: auto;
+    white-space: nowrap;
+    padding-bottom: 2px;
+  }
+  .formula .f-sub .op { color: var(--ink-soft); }
+  .formula .f-result {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-top: 12px;
+    font-family: var(--mono);
+    font-weight: 600;
+    font-size: 17px;
+    color: var(--accent-ink);
+    background: var(--accent-soft);
+    padding: 6px 14px;
+    border-radius: 6px;
+  }
+  .formula .f-note {
+    margin-top: 10px;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+  }
+
+  .twocol {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+  @media (max-width: 620px) { .twocol { grid-template-columns: 1fr; } }
+
+  .verify {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--gold);
+    background: var(--gold-soft);
+    padding: 5px 12px;
+    border-radius: 20px;
+    margin-top: 10px;
+  }
+  .verify::before { content: "✓"; }
+
+  blockquote.answer {
+    margin: 14px 0 0;
+    padding: 4px 0 4px 20px;
+    border-left: 3px solid var(--border-strong);
+    color: var(--ink);
+  }
+  .q {
+    font-family: var(--serif);
+    font-style: italic;
+    color: var(--ink-soft);
+    font-size: 1rem;
+    margin-bottom: 10px;
+  }
+
+  hr.rule {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 52px 0;
+  }
+
+  footer {
+    color: var(--ink-soft);
+    font-size: 12.5px;
+    font-family: var(--mono);
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+
+  a { color: var(--accent-ink); }
+</style>
+
+<div class="page">
+
+  <header class="hero">
+    <h1>Warf Computers, Inc.</h1>
+    <div class="meta-row">
+      <span>Período: <b>ejercicio 2010</b> (comparado contra 2009)</span>
+      <span>Cifras en <b>miles de US$</b></span>
+    </div>
+  </header>
+
+
+  <!-- ============ 1. FINANCE APPROACH ============ -->
+  <section id="finanzas">
+    <div class="step"><span class="step-num">1</span><h2>Enfoque financiero: flujo de efectivo de los activos</h2></div>
+    <p class="section-intro">La misma información, organizada como en la mayoría de los cursos de finanzas corporativas: separa lo que generan los activos de la empresa de lo que se reparte entre acreedores y accionistas.</p>
+
+    <h3>1.1 · Flujo de efectivo operativo, a partir de la utilidad neta</h3>
+    <div class="formula">
+      <div class="f-def">FEO = Utilidad neta + Gastos de intereses + Depreciación + Impuestos diferidos</div>
+      <div class="f-sub">FEO = 742 <span class="op">+</span> 95 <span class="op">+</span> 159 <span class="op">+</span> 109</div>
+      <div class="f-result">FEO = 1,105</div>
+    </div>
+    <div class="formula" style="border-left-color:var(--border-strong)">
+      <div class="f-label">Verificación cruzada — vía EBIT</div>
+      <div class="f-def">FEO = EBIT + Otros ingresos + Depreciación − Impuestos pagados en efectivo (corrientes)</div>
+      <div class="f-sub">FEO = 1,284 <span class="op">+</span> 48 <span class="op">+</span> 159 <span class="op">−</span> 386</div>
+      <div class="f-result">FEO = 1,105</div>
+    </div>
+
+    <h3>1.2 · Capex</h3>
+    <div class="formula">
+      <div class="f-def">capex = Δ (Activo fijo neto + Intangibles) + Depreciación</div>
+      <div class="f-sub">capex = (2,280 <span class="op">−</span> 1,792) <span class="op">+</span> 159</div>
+      <div class="f-result">capex = 647</div>    </div>
+
+    <h3>1.3 · Aumento en el capital de trabajo neto (WK)</h3>
+    <div class="formula">
+      <div class="f-def">WK = Activo circulante − Pasivo circulante (incluye documentos por pagar, sin excluirlo)</div>
+      <div class="f-sub">WK 2010 = 1,219 <span class="op">−</span> 491 <span class="op">=</span> 728</div>
+      <div class="f-sub" style="margin-top:4px">WK 2009 = 1,154 <span class="op">−</span> 568 <span class="op">=</span> 586</div>
+      <div class="f-result">Δ WK = 728 − 586 = 142</div>
+    </div>
+
+    <h3>1.4 · Flujo de efectivo de los activos (CFA)</h3>
+    <div class="formula">
+      <div class="f-def">CFA = FEO − capex − Δ WK</div>
+      <div class="f-sub">CFA = 1,105 <span class="op">−</span> 647 <span class="op">−</span> 142</div>
+      <div class="f-result">CFA = 316</div>
+    </div>
+
+    <div class="twocol">
+      <div class="formula">
+        <div class="f-label">Flujo a acreedores</div>
+        <div class="f-def">= Intereses − Endeudamiento neto nuevo (solo deuda LP; documentos por pagar ya está en el WK)</div>
+        <div class="f-sub">= 95 <span class="op">−</span> (118 <span class="op">−</span> 98)</div>
+        <div class="f-result">= 75</div>
+      </div>
+      <div class="formula">
+        <div class="f-label">Flujo a accionistas</div>
+        <div class="f-def">= Dividendos − Emisión neta de acciones</div>
+        <div class="f-sub">= 212 <span class="op">−</span> (11 <span class="op">−</span> 40)</div>
+        <div class="f-result">= 241</div>
+      </div>
+    </div>
+
+    <div class="formula" style="border-left-color:var(--gold)">
+      <div class="f-def">Identidad: CFA debe ser igual a lo que se reparte entre acreedores y accionistas</div>
+      <div class="f-sub">75 <span class="op">+</span> 241 <span class="op">=</span> 316 <span class="op">=</span> CFA</div>
+      <span class="verify">La identidad cuadra exactamente</span>
+    </div>
+    <p class="section-intro" style="margin-left:0"><strong>Nota:</strong> los documentos por pagar cuentan una sola vez. Si se los deja dentro del capital de trabajo (como aquí), no vuelven a restarse en el "endeudamiento neto" del flujo a acreedores — de lo contrario la identidad no cierra.</p>
+  </section>
+
+  <hr class="rule">
+
+  <!-- ============ 2. ANSWERS ============ -->
+  <section id="respuestas">
+    <div class="step"><span class="step-num">2</span><h2>Respuestas para Angus Jones &amp; Partners</h2></div>
+
+    <p class="q"><b>Pregunta 1.</b> ¿Cómo describiría los flujos de efectivo de Warf Computers?</p>
+    <blockquote class="answer">
+      La operación es sólida y casi todo lo que genera se reparte entre acreedores y accionistas, no se retiene. El FEO ($1,105) alcanza para cubrir una inversión agresiva en activos fijos (capex de $647, coherente con el desarrollo del teclado virtual) y el aumento del capital de trabajo ($142), dejando un flujo de efectivo de los activos de $316.
+      <br><br>
+      De esos $316, $241 se van a los accionistas actuales (dividendos y recompra de acciones) y solo $75 a los acreedores — la empresa está devolviendo capital a sus dueños de siempre en lugar de retenerlo.
+    </blockquote>
+
+    <p class="q"><b>Pregunta 2.</b> ¿Qué estado de flujo de efectivo describe con mayor exactitud los flujos de efectivo de la empresa?</p>
+    <blockquote class="answer">
+      El estado de flujo de los activos, porque es el que le importa a un banco o a un nuevo inversionista. El estado contable es correcto y es el exigido para reportes financieros, pero solo clasifica flujos por actividad. El estado de flujo de los activos, en cambio, muestra directamente cuánto genera el negocio y cómo se reparte entre quienes ya financian a la empresa.
+    </blockquote>
+  </section>
+
+
+</div>
