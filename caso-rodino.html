@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Caso Rodiño SRL</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<script>
+window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] }, svg: { fontCache: 'global' }, startup: { typeset: false } };
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.min.js"></script>
+<style>
+/* Layout: una columna académica; tabla ancha con scroll propio; vistas de detalle por hash */
+:root{
+  --bg:#ffffff; --fg:#14213d; --muted:#5b6782; --line:#d7deea; --soft:#f2f5fb;
+  --accent:#1f4e9c; --link:#1f4e9c; --linkbg:#e6eefb; --neg:#a3301f; --total:#eaf0fa;
+  --serif:"STIX Two Text","Cambria","Georgia",serif; --mono:"IBM Plex Mono","Consolas",monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f1524; --fg:#e4e9f4; --muted:#9aa6c0; --line:#2a3550; --soft:#161f33;
+  --accent:#8db4f5; --link:#9cc0ff; --linkbg:#1c2a48; --neg:#f09a8a; --total:#1a2540; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f1524; --fg:#e4e9f4; --muted:#9aa6c0; --line:#2a3550; --soft:#161f33;
+  --accent:#8db4f5; --link:#9cc0ff; --linkbg:#1c2a48; --neg:#f09a8a; --total:#1a2540; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--serif);font-size:17px;line-height:1.5}
+.wrap{max-width:1040px;margin:0 auto;padding-block:28px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header .eyebrow{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+h1{font-size:34px;margin:4px 0 6px;font-weight:700;text-wrap:balance}
+h2{font-size:23px;margin:36px 0 10px;text-wrap:balance}
+h3{font-size:18px;margin:22px 0 6px}
+p{margin:0 0 12px;max-width:68ch}
+.lead{color:var(--muted)}
+.hint{display:inline-flex;gap:8px;align-items:center;font-size:15px;color:var(--muted);margin:6px 0 14px}
+.hint .chip{font-family:var(--mono);font-size:13px;background:var(--linkbg);color:var(--link);border-bottom:1.5px solid var(--link);padding:1px 6px;border-radius:3px}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:4px}
+table{border-collapse:collapse;width:100%;min-width:760px;font-variant-numeric:tabular-nums}
+th,td{padding:7px 12px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+th:first-child,td:first-child{text-align:left;white-space:normal;min-width:220px}
+thead th{background:var(--soft);font-weight:600;font-size:15px;border-bottom:2px solid var(--accent)}
+td{font-family:var(--mono);font-size:14.5px}
+td:first-child{font-family:var(--serif);font-size:16px}
+tr.sec td{background:var(--soft);font-family:var(--serif);font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding-top:12px}
+tr.sub td{font-weight:600}
+tr.sub td:first-child{font-weight:700}
+tr.tot td{background:var(--total);font-weight:600;border-top:2px solid var(--accent);border-bottom:2px solid var(--accent)}
+.neg{color:var(--neg)}
+.dash{color:var(--muted)}
+a.calc{color:var(--link);background:var(--linkbg);text-decoration:none;border-bottom:1.5px solid var(--link);padding:1px 5px;border-radius:3px}
+a.calc:hover,a.calc:focus-visible{background:var(--link);color:var(--bg);outline:none}
+a.calc.neg{color:var(--neg);border-bottom-color:var(--neg)}
+a.calc.neg:hover{background:var(--neg);color:var(--bg)}
+.results{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:8px}
+.res{border:1px solid var(--line);border-top:3px solid var(--accent);padding:12px 14px;text-decoration:none;color:var(--fg);display:block}
+.res:hover,.res:focus-visible{background:var(--linkbg);outline:none}
+.res .k{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.res .v{font-family:var(--mono);font-size:22px;color:var(--link);margin-top:4px}
+.res .s{font-size:14px;color:var(--muted)}
+.notes{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.notes > div{min-width:0}
+ul{margin:0 0 12px;padding-left:20px} li{margin-bottom:6px;max-width:66ch}
+.mono{font-family:var(--mono);font-size:.9em}
+/* Detalle */
+.back{display:inline-flex;align-items:center;gap:6px;font-size:15px;color:var(--link);text-decoration:none;border:1px solid var(--line);padding:6px 12px;border-radius:4px}
+.back:hover,.back:focus-visible{background:var(--linkbg);outline:none}
+.det{max-width:760px}
+.det .where{font-size:14px;color:var(--muted);margin-top:14px}
+.box{background:var(--soft);border-left:3px solid var(--accent);padding:14px 18px;margin:12px 0 16px;overflow-x:auto}
+.box.dato{border-left-color:var(--muted);font-style:italic}
+.box .lbl{font-style:normal;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px}
+.step{margin:4px 0}
+.answer{display:flex;flex-wrap:wrap;gap:10px;align-items:baseline;border:2px solid var(--accent);padding:10px 16px;margin:8px 0 18px}
+.answer .k{font-size:14px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.answer .v{font-family:var(--mono);font-size:22px;color:var(--accent)}
+.related{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.related a{font-size:14px}
+mjx-container{max-width:100%;overflow-x:auto;overflow-y:hidden}
+mjx-container[display="true"]{margin:6px 0!important}
+.mini{min-width:0;margin:6px 0 14px}
+.mini table{min-width:520px}
+@media (max-width:720px){.results{grid-template-columns:1fr 1fr}.notes{grid-template-columns:1fr}h1{font-size:28px}}
+@media (prefers-reduced-motion:no-preference){a,.res{transition:background .15s,color .15s}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <section id="view-tabla">
+    <header>
+      <div class="eyebrow">Finanzas de Empresa · Criterios de evaluación</div>
+      <h1>Caso Rodiño SRL: flujo de fondos incremental</h1>
+      <p class="lead">Nueva línea de medias, horizonte de 4 años. Costo de capital \(k = 13{,}81\%\), alícuota \(T = 35\%\). Cifras en pesos.</p>
+      <div class="hint"><span class="chip">1.234</span> Los números resaltados requieren un cálculo. Hacé click para ver el detalle paso a paso.</div>
+    </header>
+
+    <div class="tbl">
+    <table>
+      <thead><tr><th>Concepto</th><th>Año 0</th><th>Año 1</th><th>Año 2</th><th>Año 3</th><th>Año 4</th></tr></thead>
+      <tbody id="tbody"></tbody>
+    </table>
+    </div>
+
+    <h2>Resultados</h2>
+    <div class="results">
+      <a class="res" href="#van"><div class="k">VAN</div><div class="v">1.299.031</div><div class="s">a k = 13,81%</div></a>
+      <a class="res" href="#ir"><div class="k">Índice de rentabilidad</div><div class="v">1,26</div><div class="s">VP flujos / I₀</div></a>
+      <a class="res" href="#payback"><div class="k">Payback simple</div><div class="v">2 a 10 m</div><div class="s">flujos sin descontar</div></a>
+      <a class="res" href="#payback-desc"><div class="k">Payback descontado</div><div class="v">3 a 5 m</div><div class="s">flujos descontados</div></a>
+    </div>
+
+    <h2>Qué entra y qué no entra</h2>
+    <div class="notes">
+      <div>
+        <h3>Se incluye (es incremental)</h3>
+        <ul>
+          <li>La canibalización de zapatos y el efecto positivo sobre otros productos: existen solo si se lanza la línea.</li>
+          <li>El asesoramiento futuro de la consultora ($450.000/año): se paga solo si las medias salen a la venta.</li>
+          <li>La publicidad inicial, neta de su ahorro fiscal, porque los impuestos se pagan en el año en que se devengan.</li>
+          <li>El ahorro fiscal por dar de baja el 30% del stock que no se vende, igual que el escudo por vender la máquina debajo de su valor libro.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>No se incluye</h3>
+        <ul>
+          <li>Los $500.000 ya pagados a la consultora por el desarrollo: es un costo hundido.</li>
+          <li>La tasa de capitalización de mercado de las acciones (26,3%): se descuenta con el costo de capital de la firma porque el flujo es del proyecto (FCF), no del accionista.</li>
+          <li>El capital de trabajo de zapatos y del resto de los productos: el enunciado dice que no cambia.</li>
+        </ul>
+      </div>
+    </div>
+    <p class="lead" style="margin-top:8px">Ver también la <a href="#nota-clave" style="color:var(--link)">nota sobre la clave de respuestas</a>.</p>
+  </section>
+
+  <section id="view-det" hidden>
+    <a class="back" href="#tabla">← Volver a la tabla</a>
+    <div class="det" id="det"></div>
+  </section>
+</div>
+
+<script>
+const fmt = n => n === null ? '' : (n<0?'−':'') + Math.round(Math.abs(n)).toLocaleString('es-AR');
+
+// filas: [concepto, [v0..v4], {links por año}, clase]
+const S = 'sec', B = 'sub', T = 'tot';
+const rows = [
+  ['Resultado operativo', null, null, S],
+  ['Contribución de medias', [null,4200000,4200000,4200000,4200000], 'medias'],
+  ['Canibalización de zapatos', [null,-350000,-350000,-350000,-350000], 'zapatos'],
+  ['Efecto sobre otros productos', [null,212500,212500,212500,212500], 'otros'],
+  ['Asesoramiento consultora', [null,-450000,-450000,-450000,-450000]],
+  ['Publicidad anual', [null,-400000,-400000,-400000,-400000]],
+  ['Masa salarial adicional', [null,-500000,-500000,-500000,-500000]],
+  ['Depreciación maquinaria', [null,-300000,-300000,-300000,-300000], 'depreciacion'],
+  ['EBIT', [null,2412500,2412500,2412500,2412500], 'ebit', B],
+  ['Impuesto a las ganancias (35%)', [null,-844375,-844375,-844375,-844375], 'nopat'],
+  ['NOPAT', [null,1568125,1568125,1568125,1568125], 'nopat', B],
+  ['+ Depreciación', [null,300000,300000,300000,300000], 'flujo-operativo'],
+  ['Flujo operativo', [null,1868125,1868125,1868125,1868125], 'flujo-operativo', B],
+  ['Inversiones', null, null, S],
+  ['Maquinaria (CAPEX)', [-3000000,null,null,null,null]],
+  ['Publicidad inicial neta de impuestos', [-1300000,null,null,null,null], 'publicidad'],
+  ['Inversión en capital de trabajo (−ΔCTN)', [-700000,null,-175000,null,704375], {2:'ctn-2',4:'ctn-4',0:'ctn-0'}],
+  ['Valor de rescate neto maquinaria', [null,null,null,null,922500], 'rescate'],
+  ['Flujo de fondos libre (FCF)', [-5000000,1868125,1693125,1868125,3495000], 'fcf', T],
+  ['Descuento a k = 13,81%', null, null, S],
+  ['Factor de descuento', ['1,0000','0,8787','0,7720','0,6784','0,5960'], 'descuento'],
+  ['Valor presente del FCF', [-5000000,1641442,1307158,1267257,2083174], 'descuento'],
+  ['VP acumulado', [-5000000,-3358558,-2051400,-784143,1299031], 'payback-desc', B],
+  ['FCF acumulado (sin descontar)', [-5000000,-3131875,-1438750,429375,3924375], 'payback'],
+];
+
+const tb = document.getElementById('tbody');
+rows.forEach(([name, vals, link, cls]) => {
+  const tr = document.createElement('tr'); if (cls) tr.className = cls;
+  if (!vals) { tr.innerHTML = `<td colspan="6">${name}</td>`; tb.appendChild(tr); return; }
+  let h = `<td>${name}</td>`;
+  vals.forEach((v,i) => {
+    if (v === null) { h += `<td class="dash">–</td>`; return; }
+    const txt = typeof v === 'string' ? v : fmt(v);
+    const neg = typeof v === 'number' && v < 0 ? ' neg' : '';
+    const l = link && (typeof link === 'string' ? link : link[i]);
+    h += l ? `<td><a class="calc${neg}" href="#${l}">${txt}</a></td>` : `<td class="${neg.trim()}">${txt}</td>`;
+  });
+  tr.innerHTML = h; tb.appendChild(tr);
+});
+
+// ---------- Detalles ----------
+const D = {
+medias:{t:'Contribución de la nueva línea de medias',
+ dato:'Precio de venta $75 el par, costo $40, ventas anuales de 120.000 pares.',
+ que:'Es lo que la línea de medias aporta al resultado: margen unitario por cantidad vendida.',
+ f:['\\text{Contribución} = (P - C_v) \\times Q'],
+ s:['\\text{Contribución} = (75 - 40) \\times 120.000 = 35 \\times 120.000'],
+ r:'4.200.000 por año', rel:['ebit']},
+zapatos:{t:'Canibalización de zapatos',
+ dato:'Las ventas de zapatos caerían en $1.000.000, con un costo del 65%.',
+ que:'Las medias hacen durar más los zapatos, así que se venden menos. Lo que se pierde es el margen de esas ventas, no la venta completa: el costo del 65% también desaparece.',
+ f:['\\text{Impacto} = -\\Delta \\text{Ventas} \\times (1 - c\\%)'],
+ s:['\\text{Impacto} = -1.000.000 \\times (1 - 0{,}65) = -1.000.000 \\times 0{,}35'],
+ r:'−350.000 por año', rel:['otros','ebit']},
+otros:{t:'Efecto positivo sobre otros productos',
+ dato:'Mejora del posicionamiento de la marca: ventas adicionales de $850.000 a un costo promedio del 75%.',
+ que:'Es un efecto colateral favorable. Se computa el margen de las ventas adicionales.',
+ f:['\\text{Impacto} = \\Delta \\text{Ventas} \\times (1 - c\\%)'],
+ s:['\\text{Impacto} = 850.000 \\times (1 - 0{,}75) = 850.000 \\times 0{,}25'],
+ r:'212.500 por año', rel:['zapatos','ebit']},
+depreciacion:{t:'Depreciación de la maquinaria',
+ dato:'Inversión en maquinaria de $3.000.000, que amortiza en 10 años. Método lineal, sin restar el valor de recupero.',
+ que:'La depreciación no es una salida de caja, pero reduce el impuesto. Por eso se resta para llegar al EBIT y después se vuelve a sumar.',
+ f:['\\text{Dep} = \\dfrac{\\text{Valor de origen}}{\\text{Vida útil contable}}'],
+ s:['\\text{Dep} = \\dfrac{3.000.000}{10}'],
+ r:'300.000 por año',
+ extra:'<p>La vida contable (10 años) es más larga que el proyecto (4 años). Al final del año 4 la máquina todavía tiene valor libro, y eso importa para el <a class="calc" href="#rescate">valor de rescate</a>.</p>',
+ rel:['ebit','rescate']},
+ebit:{t:'Resultado operativo incremental (EBIT)',
+ que:'Se suman todos los ingresos y costos que cambian por lanzar el proyecto, incluida la depreciación.',
+ f:['\\text{EBIT} = \\text{Contrib.} + \\text{Imp. zapatos} + \\text{Imp. otros} - \\text{Consultora} - \\text{Publicidad} - \\text{Salarios} - \\text{Dep}'],
+ s:['\\text{EBIT} = 4.200.000 - 350.000 + 212.500 - 450.000 - 400.000 - 500.000 - 300.000'],
+ r:'2.412.500 por año', rel:['medias','zapatos','otros','depreciacion','nopat']},
+nopat:{t:'Impuesto y NOPAT',
+ dato:'Alícuota fiscal del 35%. Los impuestos se pagan en el año en que se devengan.',
+ que:'El NOPAT es el resultado operativo después de impuestos, como si el proyecto se financiara sin deuda.',
+ f:['\\text{Impuesto} = \\text{EBIT} \\times T','\\text{NOPAT} = \\text{EBIT} \\times (1 - T)'],
+ s:['\\text{Impuesto} = 2.412.500 \\times 0{,}35 = 844.375','\\text{NOPAT} = 2.412.500 \\times (1 - 0{,}35) = 1.568.125'],
+ r:'Impuesto 844.375 · NOPAT 1.568.125', rel:['ebit','flujo-operativo']},
+'flujo-operativo':{t:'Flujo operativo',
+ que:'Se vuelve a sumar la depreciación porque no implicó salida de dinero. Ya cumplió su función: bajó el impuesto.',
+ f:['\\text{Flujo operativo} = \\text{NOPAT} + \\text{Dep}'],
+ s:['\\text{Flujo operativo} = 1.568.125 + 300.000'],
+ r:'1.868.125 por año',
+ extra:'<p>Forma alternativa, con el escudo fiscal explícito:</p>\\[\\underbrace{(\\text{EBIT}+\\text{Dep})(1-T)}_{2.712.500\\times0{,}65\\,=\\,1.763.125} + \\underbrace{\\text{Dep}\\times T}_{105.000} = 1.868.125\\]',
+ rel:['nopat','fcf']},
+publicidad:{t:'Publicidad inicial neta de impuestos',
+ dato:'Se destinarían $2.000.000 a publicidad al inicio (año 0).',
+ que:'La publicidad es un gasto, no un activo: se deduce del impuesto en el mismo año. Como los impuestos se pagan en el año en que se devengan, el ahorro fiscal ocurre en t = 0.',
+ f:['\\text{Publicidad neta} = \\text{Publicidad} \\times (1 - T)'],
+ s:['\\text{Publicidad neta} = 2.000.000 \\times (1 - 0{,}35) = 2.000.000 - 700.000'],
+ r:'−1.300.000 en el año 0',
+ extra:'<p>Inversión inicial total del año 0:</p>\\[I_0 = \\underbrace{3.000.000}_{\\text{maquinaria}} + \\underbrace{1.300.000}_{\\text{publicidad neta}} + \\underbrace{700.000}_{\\text{stock inicial}} = 5.000.000\\]',
+ rel:['fcf']},
+'ctn-0':{t:'Capital de trabajo: inversión inicial',
+ dato:'Se invertirán en stock (de medias) al inicio $700.000.',
+ que:'Es un dato directo. Recordar el signo: el flujo de inversión en capital de trabajo es −ΔCTN. Si el CTN sube, sale caja.',
+ f:['\\text{Flujo CTN}_0 = -\\Delta \\text{CTN}_0'],
+ s:['\\text{Flujo CTN}_0 = -(700.000 - 0)'],
+ r:'−700.000 en el año 0', rel:['ctn-2','ctn-4']},
+'ctn-2':{t:'Capital de trabajo: aumento del año 2',
+ dato:'Durante el segundo año estaría previsto aumentar el stock en un 25%.',
+ que:'El stock pasa de 700.000 a 875.000. La diferencia es una nueva salida de caja en el año 2.',
+ f:['\\Delta \\text{CTN}_2 = \\text{CTN}_0 \\times 25\\%','\\text{CTN}_2 = \\text{CTN}_0 + \\Delta \\text{CTN}_2'],
+ s:['\\Delta \\text{CTN}_2 = 700.000 \\times 0{,}25 = 175.000','\\text{CTN}_2 = 700.000 + 175.000 = 875.000'],
+ r:'−175.000 en el año 2',
+ extra:'<p>Por eso el FCF del año 2 es menor que el de los años 1 y 3: \\(1.868.125 - 175.000 = 1.693.125\\).</p>',
+ rel:['ctn-0','ctn-4','fcf']},
+'ctn-4':{t:'Capital de trabajo: recupero al final',
+ dato:'Al finalizar el proyecto quedaría un 30% de la mercadería sin vender.',
+ que:'Al cerrar el proyecto se recupera solo la parte realizable del stock, el 70%. El 30% que no se vende se da de baja: es una pérdida deducible, así que genera un ahorro de impuestos.',
+ f:['\\text{Recupero}_4 = \\underbrace{\\text{CTN} \\times (1 - 30\\%)}_{\\text{stock vendido}} + \\underbrace{\\text{CTN} \\times 30\\% \\times T}_{\\text{ahorro fiscal por la baja}}'],
+ s:['\\text{CTN}_{\\text{acumulado}} = 700.000 + 175.000 = 875.000',
+    '\\text{Stock vendido} = 875.000 \\times 0{,}70 = 612.500',
+    '\\text{Pérdida por baja} = 875.000 - 612.500 = 262.500',
+    '\\text{Ahorro fiscal} = 262.500 \\times 0{,}35 = 91.875',
+    '\\text{Recupero}_4 = 612.500 + 91.875'],
+ r:'+704.375 en el año 4',
+ extra:'<p>Es la misma lógica que la venta de la máquina por debajo de su valor libro: la pérdida contable no es una salida de caja, pero baja el impuesto a pagar.</p>',
+ rel:['ctn-2','rescate','fcf']},
+rescate:{t:'Valor de rescate neto de la maquinaria',
+ dato:'Precio de venta estimado al finalizar el proyecto: 15% de $3.000.000. Se da de baja el 31/12 del año 4.',
+ que:'Se compara el precio de venta con el valor libro. Si se vende por debajo del valor libro, hay una pérdida contable que genera ahorro de impuestos.',
+ f:['\\text{VL}_4 = \\text{Valor de origen} - 4 \\times \\text{Dep}','\\text{Rescate neto} = \\text{Precio venta} + (\\text{VL}_4 - \\text{Precio venta}) \\times T'],
+ s:['\\text{Precio venta} = 3.000.000 \\times 0{,}15 = 450.000','\\text{VL}_4 = 3.000.000 - 4 \\times 300.000 = 1.800.000','\\text{Escudo} = (1.800.000 - 450.000) \\times 0{,}35 = 472.500','\\text{Rescate neto} = 450.000 + 472.500'],
+ r:'+922.500 en el año 4', rel:['depreciacion','fcf']},
+fcf:{t:'Flujo de fondos libre (FCF)',
+ que:'Se suman, año por año, el flujo operativo y los flujos de inversión.',
+ f:['\\text{FCF}_t = \\text{Flujo operativo}_t - \\text{CAPEX}_t - \\Delta\\text{CTN}_t + \\text{Rescate}_t'],
+ s:['\\text{FCF}_0 = -3.000.000 - 1.300.000 - 700.000 = -5.000.000',
+    '\\text{FCF}_1 = 1.868.125',
+    '\\text{FCF}_2 = 1.868.125 - 175.000 = 1.693.125',
+    '\\text{FCF}_3 = 1.868.125',
+    '\\text{FCF}_4 = 1.868.125 + 704.375 + 922.500 = 3.495.000'],
+ r:'−5.000.000 · 1.868.125 · 1.693.125 · 1.868.125 · 3.495.000', rel:['flujo-operativo','publicidad','ctn-2','ctn-4','rescate','descuento']},
+descuento:{t:'Factor de descuento y valor presente',
+ dato:'Costo del capital de la firma: 13,81%.',
+ que:'Cada flujo se trae a hoy dividiéndolo por (1 + k) elevado al año en que ocurre.',
+ f:['\\text{FD}_t = \\dfrac{1}{(1+k)^t} \\qquad \\text{VP}_t = \\text{FCF}_t \\times \\text{FD}_t'],
+ s:['\\text{VP}_1 = \\dfrac{1.868.125}{1{,}1381} = 1.641.442',
+    '\\text{VP}_2 = \\dfrac{1.693.125}{1{,}1381^2} = \\dfrac{1.693.125}{1{,}2953} = 1.307.158',
+    '\\text{VP}_3 = \\dfrac{1.868.125}{1{,}1381^3} = \\dfrac{1.868.125}{1{,}4741} = 1.267.257',
+    '\\text{VP}_4 = \\dfrac{3.495.000}{1{,}1381^4} = \\dfrac{3.495.000}{1{,}6777} = 2.083.174'],
+ r:'Suma VP años 1 a 4 = 6.299.031', rel:['van','ir','payback-desc']},
+van:{t:'Valor actual neto (VAN)',
+ que:'Es la suma de todos los flujos descontados, incluida la inversión inicial. Si es positivo, el proyecto crea valor a la tasa k.',
+ f:['\\text{VAN} = \\sum_{t=0}^{4} \\dfrac{\\text{FCF}_t}{(1+k)^t}'],
+ s:['\\text{VAN} = -5.000.000 + \\dfrac{1.868.125}{1{,}1381} + \\dfrac{1.693.125}{1{,}1381^2} + \\dfrac{1.868.125}{1{,}1381^3} + \\dfrac{3.495.000}{1{,}1381^4}',
+    '\\text{VAN} = -5.000.000 + 1.641.442 + 1.307.158 + 1.267.257 + 2.083.174'],
+ r:'VAN = 1.299.031 → se acepta', rel:['descuento','ir','nota-clave']},
+ir:{t:'Índice de rentabilidad (IR)',
+ que:'Mide cuánto valor presente genera cada peso invertido. Si IR > 1, el VAN es positivo.',
+ f:['\\text{IR} = \\dfrac{\\sum_{t=1}^{4} \\dfrac{\\text{FCF}_t}{(1+k)^t}}{I_0}'],
+ s:['\\text{IR} = \\dfrac{1.641.442 + 1.307.158 + 1.267.257 + 2.083.174}{5.000.000} = \\dfrac{6.299.031}{5.000.000}'],
+ r:'IR = 1,2598 ≈ 1,26', extra:'<p>Lectura: por cada $1 invertido hoy, el proyecto devuelve $1,26 en valor presente.</p>', rel:['descuento','van']},
+payback:{t:'Payback simple',
+ que:'Cuánto tarda el proyecto en recuperar la inversión con flujos sin descontar. Se acumulan los FCF hasta que el acumulado cambia de signo.',
+ tabla:[['Año',0,1,2,3,4],['FCF',-5000000,1868125,1693125,1868125,3495000],['Acumulado',-5000000,-3131875,-1438750,429375,3924375]],
+ f:['\\text{Payback} = (t-1) + \\dfrac{\\left|\\text{Acumulado}_{t-1}\\right|}{\\text{FCF}_t}'],
+ s:['\\text{Payback} = 2 + \\dfrac{1.438.750}{1.868.125} = 2 + 0{,}7702 \\text{ años}','0{,}7702 \\times 12 = 9{,}24 \\text{ meses}'],
+ r:'2 años y 10 meses',
+ extra:'<p>El acumulado se vuelve positivo durante el año 3. Al final del mes 9 todavía faltan unos $37.700; la inversión se termina de recuperar en el transcurso del mes 10.</p>',
+ rel:['fcf','payback-desc']},
+'payback-desc':{t:'Payback descontado',
+ que:'Igual que el payback simple, pero acumulando los flujos ya descontados. Siempre da más largo que el simple porque los flujos futuros valen menos.',
+ tabla:[['Año',0,1,2,3,4],['VP del FCF',-5000000,1641442,1307158,1267257,2083174],['VP acumulado',-5000000,-3358558,-2051400,-784143,1299031]],
+ f:['\\text{Payback desc.} = (t-1) + \\dfrac{\\left|\\text{VP acum.}_{t-1}\\right|}{\\text{VP}_t}'],
+ s:['\\text{Payback desc.} = 3 + \\dfrac{784.143}{2.083.174} = 3 + 0{,}3764 \\text{ años}','0{,}3764 \\times 12 = 4{,}52 \\text{ meses}'],
+ r:'3 años y 5 meses',
+ extra:'<p>La recuperación ocurre en el transcurso del mes 5 del año 4. La clave de la cátedra indica 3 años y 7 meses porque cobra el rescate en el año 5; ver la <a class="calc" href="#nota-clave">nota sobre la clave</a>.</p>',
+ rel:['descuento','payback']},
+'nota-clave':{t:'Nota sobre la clave de respuestas',
+ que:'La clave de la cátedra da VAN = $1.232.310, IR = 1,25, payback de 2 años y 10 meses y payback descontado de 3 años y 7 meses. Esta página usa los mismos flujos, con una sola diferencia: el momento en que se cobra la venta de la máquina.',
+ html:`<h3>La única diferencia</h3>
+ <p>La planilla de la cátedra cobra el rescate neto de la maquinaria (922.500) en el año 5. Esta página lo cobra en el año 4.</p>
+ <p>Las consideraciones generales de la guía dicen que el activo se da de baja el 31/12 del año en que se usó. Por eso acá la venta se ubica al cierre del año 4, que es además el valor libro que se usa en el cálculo (\\(\\text{VL}_4 = 1.800.000\\)).</p>`,
+ tabla:[['','Año 4','Año 5','VAN','IR','PB desc.'],
+   ['Cátedra (rescate en t = 5)','2.572.500','922.500','1.232.310','1,25','3 a 7 m'],
+   ['Esta página (rescate en t = 4)','3.495.000','–','1.299.031','1,26','3 a 5 m']],
+ extra:'<p>El VAN es mayor en esta página porque los 922.500 se descuentan un año menos: \\(\\tfrac{922.500}{1{,}1381^4} - \\tfrac{922.500}{1{,}1381^5} = 549.851 - 483.130 = 66.721\\). El resto de los flujos, incluido el ahorro fiscal por el stock no vendido, es idéntico.</p>',
+ rel:['rescate','van','payback-desc']},
+};
+
+const titles = Object.fromEntries(Object.entries(D).map(([k,v])=>[k,v.t]));
+function miniTable(t){
+  const isNum = v => typeof v === 'number';
+  let h = '<div class="tbl mini"><table><thead><tr>'+t[0].map(c=>`<th>${typeof c==='number'?'Año '+c:c}</th>`).join('')+'</tr></thead><tbody>';
+  t.slice(1).forEach(r=>{ h+='<tr>'+r.map((c,i)=> i===0?`<td>${c}</td>`:`<td class="${isNum(c)&&c<0?'neg':''}">${isNum(c)?fmt(c):c}</td>`).join('')+'</tr>'; });
+  return h+'</tbody></table></div>';
+}
+function render(){
+  const id = location.hash.slice(1);
+  const tv = document.getElementById('view-tabla'), dv = document.getElementById('view-det');
+  if (!id || !D[id]) { tv.hidden=false; dv.hidden=true; window.scrollTo(0,0); return; }
+  const d = D[id];
+  let h = `<p class="where">Caso Rodiño SRL · detalle del cálculo</p><h1>${d.t}</h1>`;
+  if (d.dato) h += `<div class="box dato"><span class="lbl">Dato del enunciado</span>${d.dato}</div>`;
+  if (d.que) h += `<p>${d.que}</p>`;
+  if (d.html) h += d.html;
+  if (d.tabla) h += miniTable(d.tabla);
+  if (d.f) h += `<h3>Fórmula</h3><div class="box">${d.f.map(x=>`\\[${x}\\]`).join('')}</div>`;
+  if (d.s) h += `<h3>Reemplazando</h3><div class="box">${d.s.map(x=>`<div class="step">\\[${x}\\]</div>`).join('')}</div>`;
+  if (d.r) h += `<div class="answer"><span class="k">Resultado</span><span class="v">${d.r}</span></div>`;
+  if (d.extra) h += d.extra;
+  if (d.rel) h += `<h3>Relacionado</h3><div class="related">${d.rel.map(r=>`<a class="calc" href="#${r}">${titles[r]}</a>`).join('')}</div>`;
+  document.getElementById('det').innerHTML = h;
+  tv.hidden=true; dv.hidden=false; window.scrollTo(0,0);
+  typeset(document.getElementById('det'));
+}
+function typeset(el){
+  if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetClear && MathJax.typesetClear([el]); MathJax.typesetPromise([el]).catch(()=>{}); }
+  else setTimeout(()=>typeset(el), 150);
+}
+window.addEventListener('hashchange', render);
+render();
+typeset(document.querySelector('header'));
+</script>
+</body>
+</html>
