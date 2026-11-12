@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>El ciclo del capital de trabajo</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<script>
+window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] }, svg: { fontCache: 'global' }, startup: { typeset: false } };
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.min.js"></script>
+<style>
+/* Layout: una columna académica; tabla ancha con scroll propio; vistas de detalle por hash */
+:root{
+  --bg:#ffffff; --fg:#14213d; --muted:#5b6782; --line:#d7deea; --soft:#f2f5fb;
+  --accent:#1f4e9c; --link:#1f4e9c; --linkbg:#e6eefb; --neg:#a3301f; --total:#eaf0fa;
+  --serif:"STIX Two Text","Cambria","Georgia",serif; --mono:"IBM Plex Mono","Consolas",monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f1524; --fg:#e4e9f4; --muted:#9aa6c0; --line:#2a3550; --soft:#161f33;
+  --accent:#8db4f5; --link:#9cc0ff; --linkbg:#1c2a48; --neg:#f09a8a; --total:#1a2540; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f1524; --fg:#e4e9f4; --muted:#9aa6c0; --line:#2a3550; --soft:#161f33;
+  --accent:#8db4f5; --link:#9cc0ff; --linkbg:#1c2a48; --neg:#f09a8a; --total:#1a2540; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--serif);font-size:17px;line-height:1.5}
+.wrap{max-width:1040px;margin:0 auto;padding-block:28px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header .eyebrow{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+h1{font-size:34px;margin:4px 0 6px;font-weight:700;text-wrap:balance}
+h2{font-size:23px;margin:36px 0 10px;text-wrap:balance}
+h3{font-size:18px;margin:22px 0 6px}
+p{margin:0 0 12px;max-width:68ch}
+.lead{color:var(--muted)}
+.hint{display:inline-flex;gap:8px;align-items:center;font-size:15px;color:var(--muted);margin:6px 0 14px}
+.hint .chip{font-family:var(--mono);font-size:13px;background:var(--linkbg);color:var(--link);border-bottom:1.5px solid var(--link);padding:1px 6px;border-radius:3px}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:4px}
+table{border-collapse:collapse;width:100%;min-width:760px;font-variant-numeric:tabular-nums}
+th,td{padding:7px 12px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+th:first-child,td:first-child{text-align:left;white-space:normal;min-width:220px}
+thead th{background:var(--soft);font-weight:600;font-size:15px;border-bottom:2px solid var(--accent)}
+td{font-family:var(--mono);font-size:14.5px}
+td:first-child{font-family:var(--serif);font-size:16px}
+tr.sec td{background:var(--soft);font-family:var(--serif);font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding-top:12px}
+tr.sub td{font-weight:600}
+tr.sub td:first-child{font-weight:700}
+tr.tot td{background:var(--total);font-weight:600;border-top:2px solid var(--accent);border-bottom:2px solid var(--accent)}
+.neg{color:var(--neg)}
+.dash{color:var(--muted)}
+a.calc{color:var(--link);background:var(--linkbg);text-decoration:none;border-bottom:1.5px solid var(--link);padding:1px 5px;border-radius:3px}
+a.calc:hover,a.calc:focus-visible{background:var(--link);color:var(--bg);outline:none}
+a.calc.neg{color:var(--neg);border-bottom-color:var(--neg)}
+a.calc.neg:hover{background:var(--neg);color:var(--bg)}
+.results{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:8px}
+.res{border:1px solid var(--line);border-top:3px solid var(--accent);padding:12px 14px;text-decoration:none;color:var(--fg);display:block}
+.res:hover,.res:focus-visible{background:var(--linkbg);outline:none}
+.res .k{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.res .v{font-family:var(--mono);font-size:22px;color:var(--link);margin-top:4px}
+.res .s{font-size:14px;color:var(--muted)}
+.notes{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.notes > div{min-width:0}
+ul{margin:0 0 12px;padding-left:20px} li{margin-bottom:6px;max-width:66ch}
+.mono{font-family:var(--mono);font-size:.9em}
+/* Detalle */
+.back{display:inline-flex;align-items:center;gap:6px;font-size:15px;color:var(--link);text-decoration:none;border:1px solid var(--line);padding:6px 12px;border-radius:4px}
+.back:hover,.back:focus-visible{background:var(--linkbg);outline:none}
+.det{max-width:760px}
+.det .where{font-size:14px;color:var(--muted);margin-top:14px}
+.box{background:var(--soft);border-left:3px solid var(--accent);padding:14px 18px;margin:12px 0 16px;overflow-x:auto}
+.box.dato{border-left-color:var(--muted);font-style:italic}
+.box .lbl{font-style:normal;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px}
+.step{margin:4px 0}
+.answer{display:flex;flex-wrap:wrap;gap:10px;align-items:baseline;border:2px solid var(--accent);padding:10px 16px;margin:8px 0 18px}
+.answer .k{font-size:14px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.answer .v{font-family:var(--mono);font-size:22px;color:var(--accent)}
+.related{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.related a{font-size:14px}
+mjx-container{max-width:100%;overflow-x:auto;overflow-y:hidden}
+mjx-container[display="true"]{margin:6px 0!important}
+.mini{min-width:0;margin:6px 0 14px}
+.mini table{min-width:520px}
+nav.toc{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 4px}
+nav.toc a{font-size:14px;color:var(--link);text-decoration:none;border:1px solid var(--line);padding:4px 10px;border-radius:4px}
+nav.toc a:hover{background:var(--linkbg)}
+.chain{display:flex;flex-wrap:wrap;align-items:stretch;gap:8px;margin-top:8px}
+.chain .res{flex:1 1 130px}
+.chain .arr{align-self:center;color:var(--muted);font-size:20px}
+.callout{border:1px solid var(--line);border-left:4px solid var(--neg);padding:12px 16px;margin:16px 0}
+.callout b{color:var(--neg)}
+.results.r3{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media (max-width:720px){.results{grid-template-columns:1fr 1fr}.notes{grid-template-columns:1fr}h1{font-size:28px}}
+@media (prefers-reduced-motion:no-preference){a,.res{transition:background .15s,color .15s}}
+
+.panel{border:1px solid var(--line);border-radius:6px;padding:18px 20px;margin:14px 0;background:var(--bg)}
+.ctrls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px 22px;margin-bottom:14px}
+.ctrl label{display:flex;justify-content:space-between;font-size:14px;color:var(--muted)}
+.ctrl label b{font-family:var(--mono);color:var(--fg);font-weight:500}
+.ctrl input[type=range]{width:100%;accent-color:var(--link)}
+.ctrl input[type=number]{width:100%;font-family:var(--mono);font-size:15px;padding:5px 8px;border:1px solid var(--line);border-radius:4px;background:var(--soft);color:var(--fg)}
+.presets{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 12px}
+.presets button,.quiz button{font-family:var(--serif);font-size:14px;border:1px solid var(--line);background:var(--soft);color:var(--fg);padding:5px 12px;border-radius:4px;cursor:pointer}
+.presets button:hover,.quiz button:hover{background:var(--linkbg);color:var(--link)}
+svg text{font-family:var(--serif);fill:var(--fg)}
+svg .mono{font-family:var(--mono)}
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:12px}
+.kpi{border-top:3px solid var(--link);background:var(--soft);padding:10px 12px}
+.kpi .k{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.kpi .v{font-family:var(--mono);font-size:19px;color:var(--link);margin-top:2px}
+.kpi.bad{border-top-color:var(--neg)} .kpi.bad .v{color:var(--neg)}
+.msg{margin-top:12px;padding:10px 14px;border-left:4px solid var(--link);background:var(--soft);font-size:16px}
+.msg.bad{border-left-color:var(--neg)}
+.legend{display:flex;gap:16px;font-size:13px;color:var(--muted);margin-top:6px;flex-wrap:wrap}
+.legend span::before{content:"";display:inline-block;width:12px;height:12px;margin-right:6px;vertical-align:-1px;background:var(--c)}
+.quiz .q{border:1px solid var(--line);border-radius:6px;padding:14px 16px;margin:10px 0}
+.quiz .q p{margin:0 0 10px}
+.quiz .opts{display:flex;gap:8px;flex-wrap:wrap}
+.quiz .fb{margin-top:10px;font-size:15.5px;display:none}
+.quiz .ok{color:#1d6b3a} .quiz .no{color:var(--neg)}
+.quiz button.sel-ok{background:#e3f3e8;border-color:#1d6b3a;color:#1d6b3a}
+.quiz button.sel-no{background:#f8e5e1;border-color:var(--neg);color:var(--neg)}
+.score{font-family:var(--mono);font-size:15px;color:var(--muted);margin-top:8px}
+@media (max-width:760px){.ctrls,.kpis{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="eyebrow">Finanzas de Empresa · Capital de trabajo · Antes de los ejercicios</div>
+  <h1>El ciclo del capital de trabajo</h1>
+  <p class="lead">Mové los controles y mirá qué cambia.</p>
+</header>
+
+<!-- ================= 1 ================= -->
+<p class="lead">La mercadería primero está en stock y después se vende a crédito. Mientras tanto, los proveedores también nos dan plazo. El hueco entre lo que pagamos y lo que cobramos es lo que hay que financiar.</p>
+<div class="panel">
+  <div class="ctrls">
+    <div class="ctrl"><label>Días de inventario <b id="v-dio"></b></label><input type="range" id="dio" min="0" max="180" value="45"></div>
+    <div class="ctrl"><label>Días de cobro <b id="v-dso"></b></label><input type="range" id="dso" min="0" max="180" value="60"></div>
+    <div class="ctrl"><label>Días de pago a proveedores <b id="v-dpo"></b></label><input type="range" id="dpo" min="0" max="240" value="60"></div>
+  </div>
+  <div class="presets">
+    <button data-p="45,60,60">Industria típica</button>
+    <button data-p="20,0,45">Supermercado (cobra al contado)</button>
+    <button data-p="105,41,165">Ejercicio 2, guía 2022 (CCE negativo)</button>
+    <button data-p="120,90,30">Mayorista con mucho stock</button>
+  </div>
+  <svg id="tl" viewBox="0 0 900 230" width="100%" role="img" aria-label="Línea de tiempo del ciclo de capital de trabajo"></svg>
+  <div class="kpis">
+    <div class="kpi"><div class="k">Ciclo operativo</div><div class="v" id="k-co"></div></div>
+    <div class="kpi"><div class="k">Plazo de proveedores</div><div class="v" id="k-dpo"></div></div>
+    <div class="kpi" id="kpi-cce"><div class="k">Ciclo de efectivo</div><div class="v" id="k-cce"></div></div>
+    <div class="kpi"><div class="k">Rotación de inventario</div><div class="v" id="k-rot"></div></div>
+  </div>
+  <div class="msg" id="m1"></div>
+</div>
+<p>\[ \text{Ciclo operativo} = \text{días de inventario} + \text{días de cobro} \qquad \text{Ciclo de efectivo} = \text{Ciclo operativo} - \text{días de pago} \]</p>
+
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const pesos = n => (n<0?'−':'') + '$' + Math.round(Math.abs(n)).toLocaleString('es-AR');
+const num = n => (n<0?'−':'') + Math.round(Math.abs(n)).toLocaleString('es-AR');
+const S = (tag, a, txt) => { const e = document.createElementNS('http://www.w3.org/2000/svg', tag); for (const k in a) e.setAttribute(k, a[k]); if (txt !== undefined) e.textContent = txt; return e; };
+
+// ---------- 1 + 2 ----------
+function upd12(){
+  const dio=+$('dio').value, dso=+$('dso').value, dpo=+$('dpo').value;
+  $('v-dio').textContent=dio+' d'; $('v-dso').textContent=dso+' d'; $('v-dpo').textContent=dpo+' d';
+  const co=dio+dso, cce=co-dpo;
+  $('k-co').textContent=co+' días'; $('k-dpo').textContent=dpo+' días'; $('k-cce').textContent=cce+' días';
+  $('k-rot').textContent= dio>0 ? (365/dio).toFixed(2).replace('.',',')+' veces' : '—';
+  $('kpi-cce').className = 'kpi' + (cce>0?' bad':'');
+  // timeline
+  const svg=$('tl'); svg.innerHTML='';
+  const L=150, R=800, maxd=Math.max(co,dpo,30), x=d=>L+(R-L)*d/maxd;
+  const row=(y,lab)=>svg.appendChild(S('text',{x:10,y:y+17,'font-size':14},lab));
+  row(28,'La mercadería'); row(88,'Los proveedores'); row(148,'A financiar');
+  const bar=(x0,x1,y,fill,txt,tc)=>{ if(x1<=x0) return; svg.appendChild(S('rect',{x:x0,y:y,width:x1-x0,height:26,fill:fill,rx:3}));
+    if(x1-x0 > txt.length*6.6+12) svg.appendChild(S('text',{x:(x0+x1)/2,y:y+18,'font-size':13,'text-anchor':'middle',style:'fill:'+(tc||'#fff')},txt));
+    else { const cx=Math.min(Math.max((x0+x1)/2, L+txt.length*3.3), 895-txt.length*3.3);
+      svg.appendChild(S('text',{x:cx,y:y-5,'font-size':12.5,'text-anchor':'middle',style:'fill:'+fill},txt)); } };
+  bar(x(0),x(dio),28,'#5b7fb8','En stock · '+dio+' d');
+  bar(x(dio),x(co),28,'#1f4e9c','Crédito a clientes · '+dso+' d');
+  bar(x(0),x(dpo),88,'#8a9bb8','Plazo del proveedor · '+dpo+' d');
+  if (cce>0) bar(x(dpo),x(co),148,'#a3301f','La empresa financia '+cce+' d');
+  else if (cce<0) bar(x(co),x(dpo),148,'#1d6b3a','El proveedor financia '+(-cce)+' d de más');
+  // markers
+  const mk=(d,lab,y)=>{ svg.appendChild(S('line',{x1:x(d),x2:x(d),y1:20,y2:186,stroke:'var(--muted)','stroke-dasharray':'3 3'}));
+    svg.appendChild(S('text',{x:x(d),y:y,'font-size':12,'text-anchor':(x(d)>R-60?'end':'middle'),style:'fill:var(--muted)'},lab)); };
+  mk(0,'Compra (día 0)',208); if(dio>0) mk(dio,'Venta (día '+dio+')',222); mk(co,'Cobro (día '+co+')',208);
+  if (dpo!==co && dpo!==0) mk(dpo,'Pago (día '+dpo+')',222);
+  $('m1').className='msg'+(cce>0?' bad':'');
+  $('m1').innerHTML = cce>0 ? `Entre que se le paga al proveedor (día ${dpo}) y que se cobra (día ${co}) pasan <b>${cce} días</b>: la empresa tiene que poner esa plata.`
+    : cce<0 ? `Se cobra antes de pagar: los proveedores financian el ciclo completo y sobran <b>${-cce} días</b>. El ciclo de efectivo es negativo y el capital de trabajo genera fondos.`
+    : 'Se paga el mismo día que se cobra: el ciclo de efectivo es cero.';
+}
+['dio','dso','dpo'].forEach(id=>$(id).addEventListener('input',upd12));
+document.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{ const [a,c,d]=b.dataset.p.split(','); $('dio').value=a; $('dso').value=c; $('dpo').value=d; upd12(); });
+
+upd12();
+function typeset(){ if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise().catch(()=>{}); else setTimeout(typeset,150); }
+typeset();
+</script>
+</body>
+</html>
