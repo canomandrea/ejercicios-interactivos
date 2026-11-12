@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Caso The New Fragance</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<script>
+window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] }, svg: { fontCache: 'global' }, startup: { typeset: false } };
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.min.js"></script>
+<style>
+/* Layout: una columna académica; tabla ancha con scroll propio; vistas de detalle por hash */
+:root{
+  --bg:#ffffff; --fg:#14213d; --muted:#5b6782; --line:#d7deea; --soft:#f2f5fb;
+  --accent:#1f4e9c; --link:#1f4e9c; --linkbg:#e6eefb; --neg:#a3301f; --total:#eaf0fa;
+  --serif:"STIX Two Text","Cambria","Georgia",serif; --mono:"IBM Plex Mono","Consolas",monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f1524; --fg:#e4e9f4; --muted:#9aa6c0; --line:#2a3550; --soft:#161f33;
+  --accent:#8db4f5; --link:#9cc0ff; --linkbg:#1c2a48; --neg:#f09a8a; --total:#1a2540; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f1524; --fg:#e4e9f4; --muted:#9aa6c0; --line:#2a3550; --soft:#161f33;
+  --accent:#8db4f5; --link:#9cc0ff; --linkbg:#1c2a48; --neg:#f09a8a; --total:#1a2540; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--serif);font-size:17px;line-height:1.5}
+.wrap{max-width:1040px;margin:0 auto;padding-block:28px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header .eyebrow{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+h1{font-size:34px;margin:4px 0 6px;font-weight:700;text-wrap:balance}
+h2{font-size:23px;margin:36px 0 10px;text-wrap:balance}
+h3{font-size:18px;margin:22px 0 6px}
+p{margin:0 0 12px;max-width:68ch}
+.lead{color:var(--muted)}
+.hint{display:inline-flex;gap:8px;align-items:center;font-size:15px;color:var(--muted);margin:6px 0 14px}
+.hint .chip{font-family:var(--mono);font-size:13px;background:var(--linkbg);color:var(--link);border-bottom:1.5px solid var(--link);padding:1px 6px;border-radius:3px}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:4px}
+table{border-collapse:collapse;width:100%;min-width:760px;font-variant-numeric:tabular-nums}
+th,td{padding:7px 12px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+th:first-child,td:first-child{text-align:left;white-space:normal;min-width:220px}
+thead th{background:var(--soft);font-weight:600;font-size:15px;border-bottom:2px solid var(--accent)}
+td{font-family:var(--mono);font-size:14.5px}
+td:first-child{font-family:var(--serif);font-size:16px}
+tr.sec td{background:var(--soft);font-family:var(--serif);font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding-top:12px}
+tr.sub td{font-weight:600}
+tr.sub td:first-child{font-weight:700}
+tr.tot td{background:var(--total);font-weight:600;border-top:2px solid var(--accent);border-bottom:2px solid var(--accent)}
+.neg{color:var(--neg)}
+.dash{color:var(--muted)}
+a.calc{color:var(--link);background:var(--linkbg);text-decoration:none;border-bottom:1.5px solid var(--link);padding:1px 5px;border-radius:3px}
+a.calc:hover,a.calc:focus-visible{background:var(--link);color:var(--bg);outline:none}
+a.calc.neg{color:var(--neg);border-bottom-color:var(--neg)}
+a.calc.neg:hover{background:var(--neg);color:var(--bg)}
+.results{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:8px}
+.res{border:1px solid var(--line);border-top:3px solid var(--accent);padding:12px 14px;text-decoration:none;color:var(--fg);display:block}
+.res:hover,.res:focus-visible{background:var(--linkbg);outline:none}
+.res .k{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.res .v{font-family:var(--mono);font-size:22px;color:var(--link);margin-top:4px}
+.res .s{font-size:14px;color:var(--muted)}
+.notes{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.notes > div{min-width:0}
+ul{margin:0 0 12px;padding-left:20px} li{margin-bottom:6px;max-width:66ch}
+.mono{font-family:var(--mono);font-size:.9em}
+/* Detalle */
+.back{display:inline-flex;align-items:center;gap:6px;font-size:15px;color:var(--link);text-decoration:none;border:1px solid var(--line);padding:6px 12px;border-radius:4px}
+.back:hover,.back:focus-visible{background:var(--linkbg);outline:none}
+.det{max-width:760px}
+.det .where{font-size:14px;color:var(--muted);margin-top:14px}
+.box{background:var(--soft);border-left:3px solid var(--accent);padding:14px 18px;margin:12px 0 16px;overflow-x:auto}
+.box.dato{border-left-color:var(--muted);font-style:italic}
+.box .lbl{font-style:normal;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px}
+.step{margin:4px 0}
+.answer{display:flex;flex-wrap:wrap;gap:10px;align-items:baseline;border:2px solid var(--accent);padding:10px 16px;margin:8px 0 18px}
+.answer .k{font-size:14px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.answer .v{font-family:var(--mono);font-size:22px;color:var(--accent)}
+.related{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.related a{font-size:14px}
+mjx-container{max-width:100%;overflow-x:auto;overflow-y:hidden}
+mjx-container[display="true"]{margin:6px 0!important}
+.mini{min-width:0;margin:6px 0 14px}
+.mini table{min-width:520px}
+nav.toc{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 4px}
+nav.toc a{font-size:14px;color:var(--link);text-decoration:none;border:1px solid var(--line);padding:4px 10px;border-radius:4px}
+nav.toc a:hover{background:var(--linkbg)}
+.chain{display:flex;flex-wrap:wrap;align-items:stretch;gap:8px;margin-top:8px}
+.chain .res{flex:1 1 130px}
+.chain .arr{align-self:center;color:var(--muted);font-size:20px}
+.callout{border:1px solid var(--line);border-left:4px solid var(--neg);padding:12px 16px;margin:16px 0}
+.callout b{color:var(--neg)}
+.results.r3{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media (max-width:720px){.results{grid-template-columns:1fr 1fr}.notes{grid-template-columns:1fr}h1{font-size:28px}}
+@media (prefers-reduced-motion:no-preference){a,.res{transition:background .15s,color .15s}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <section id="view-tabla">
+    <header>
+      <div class="eyebrow">Finanzas de Empresa · Caso integrador</div>
+      <h1>Caso The New Fragance: lanzamiento de una nueva fragancia</h1>
+      <p class="lead">Flujos incrementales, costo de capital, criterios de evaluación y valuación de la acción. Inflación \(\pi = 2\%\) anual, alícuota \(T = 35\%\). Cifras en dólares nominales.</p>
+      <div class="hint"><span class="chip">1.234</span> Los números resaltados requieren un cálculo. Hacé click para ver el detalle paso a paso.</div>
+      <nav class="toc">
+        <a href="#sec-relevantes">Qué entra</a><a href="#sec-a">a) Resultados</a><a href="#sec-b">b) Flujo de fondos</a><a href="#sec-c">c) Costo de capital</a><a href="#sec-d">d) Criterios</a><a href="#sec-eh">e–h) Preguntas</a>
+      </nav>
+    </header>
+
+    <h2 id="sec-relevantes">Qué entra y qué no entra</h2>
+    <div class="notes">
+      <div>
+        <h3>Se incluye (es incremental)</h3>
+        <ul>
+          <li>La matriz (U$S 75.000), su amortización y su valor de recupero.</li>
+          <li>El capital de trabajo: 10% de las ventas del año siguiente.</li>
+          <li>El <a class="calc" href="#alquiler">alquiler que se deja de cobrar</a> por el galpón propio: es un costo de oportunidad.</li>
+          <li>La <a class="calc" href="#erosion">erosión de ventas</a> del producto actual: se pierde su margen de 1,5 por unidad.</li>
+          <li>Solo <a class="calc" href="#mano-obra">3 de los 5 operarios</a>: los otros 2 se reasignan y ya se pagan sin el proyecto.</li>
+          <li>La publicidad anual de U$S 50.000 y la <a class="calc" href="#promo">promoción de lanzamiento</a>, que reemplaza a la publicidad inicial.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>No se incluye</h3>
+        <ul>
+          <li>La investigación de mercado (U$S 100.000): ya se pagó, es un costo hundido.</li>
+          <li>Los honorarios de la consultora (U$S 30.000): aunque estén impagos, se deben con o sin proyecto. También son hundidos.</li>
+          <li>Los intereses de la deuda: el costo de financiarse ya está en el WACC. Restarlos en el flujo sería contarlo dos veces.</li>
+        </ul>
+      </div>
+    </div>
+    <p class="lead">Todos los montos del enunciado están en moneda de hoy. Para pasarlos a nominales se multiplican por \((1{,}02)^t\). La amortización no se ajusta: la ley amortiza el costo histórico.</p>
+
+    <h2 id="sec-a">a) Estado de resultados incremental</h2>
+    <p class="lead">Proyecto a 5 años, como lo plantea el enunciado. Sirve para calcular el impuesto.</p>
+    <div class="tbl">
+    <table>
+      <thead><tr><th>Concepto</th><th>Año 1</th><th>Año 2</th><th>Año 3</th><th>Año 4</th><th>Año 5</th></tr></thead>
+      <tbody id="tb-er"></tbody>
+    </table>
+    </div>
+    <div class="callout"><b>Ojo con el año 5.</b> El EBITDA es negativo: ese año el galpón y los clientes del producto actual valen más que la nueva fragancia. ¿Conviene cortar antes? Ver el <a class="calc" href="#abandono">análisis de abandono</a>.</div>
+
+    <h2 id="sec-b">b) Flujo de fondos: versión que se evalúa (discontinuando en el año 4)</h2>
+    <p class="lead">Se discontinúa al cierre del año 4 porque así el VAN es mayor. La matriz se vende ese año y el capital de trabajo se recupera un año antes.</p>
+    <div class="tbl">
+    <table>
+      <thead><tr><th>Concepto</th><th>Año 0</th><th>Año 1</th><th>Año 2</th><th>Año 3</th><th>Año 4</th></tr></thead>
+      <tbody id="tb-fcf"></tbody>
+    </table>
+    </div>
+
+    <h2 id="sec-c">c) Costo del capital de la firma</h2>
+    <p class="lead">La firma no cotiza: se parte del riesgo del sector, se le saca la deuda del sector y se le pone la de la firma.</p>
+    <div class="chain">
+      <a class="res" href="#beta-sector"><div class="k">β sector</div><div class="v">1,19</div><div class="s">ρ · σᵢ / σₘ</div></a><span class="arr">→</span>
+      <a class="res" href="#beta-u"><div class="k">β desapalancada</div><div class="v">0,8302</div><div class="s">D/E sector 40/60</div></a><span class="arr">→</span>
+      <a class="res" href="#beta-l"><div class="k">β firma</div><div class="v">1,1208</div><div class="s">D/E firma 35/65</div></a><span class="arr">→</span>
+      <a class="res" href="#ke"><div class="k">kₑ (CAPM)</div><div class="v">13,045%</div><div class="s">r<sub>f</sub> 5 años</div></a>
+    </div>
+    <div class="chain" style="margin-top:12px">
+      <a class="res" href="#kd"><div class="k">k<sub>d</sub> (YTM)</div><div class="v">3,50%</div><div class="s">no el cupón</div></a><span class="arr">→</span>
+      <a class="res" href="#wacc"><div class="k">WACC nominal</div><div class="v">9,276%</div><div class="s">65% E · 35% D</div></a><span class="arr">→</span>
+      <a class="res" href="#wacc-real"><div class="k">WACC real</div><div class="v">7,133%</div><div class="s">Fisher, π = 2%</div></a>
+    </div>
+
+    <h2 id="sec-d">d) Criterios de evaluación</h2>
+    <div class="results">
+      <a class="res" href="#van"><div class="k">VAN</div><div class="v">375.343</div><div class="s">a WACC = 9,276%</div></a>
+      <a class="res" href="#tir"><div class="k">TIR</div><div class="v">43,2%</div><div class="s">real: 40,4%</div></a>
+      <a class="res" href="#payback"><div class="k">Payback simple</div><div class="v">2 a 5 m</div><div class="s">flujos sin descontar</div></a>
+      <a class="res" href="#payback-desc"><div class="k">Payback descontado</div><div class="v">2 a 8 m</div><div class="s">flujos descontados</div></a>
+    </div>
+    <p style="margin-top:12px">Decisión: <b>se acepta el proyecto</b>. Ver la <a class="calc" href="#decision">justificación de cada criterio</a>.</p>
+
+    <h2 id="sec-eh">e–h) Preguntas conceptuales y de mercado</h2>
+    <div class="results">
+      <a class="res" href="#reinversion"><div class="k">e) Reinversión</div><div class="v" style="font-size:17px">¿VAN como TIR?</div><div class="s">supuesto y demostración</div></a>
+      <a class="res" href="#port-er"><div class="k">f) Portafolio</div><div class="v">12,52%</div><div class="s">β 1,052 · σ 24,12%</div></a>
+      <a class="res" href="#accion"><div class="k">g) Precio de la acción</div><div class="v">36,91</div><div class="s">FCFE en dos etapas</div></a>
+      <a class="res" href="#accion-proyecto"><div class="k">h) Con el proyecto</div><div class="v">40,66</div><div class="s">+ VAN / acciones</div></a>
+    </div>
+  </section>
+
+  <section id="view-det" hidden>
+    <a class="back" href="#tabla">← Volver a la tabla</a>
+    <div class="det" id="det"></div>
+  </section>
+</div>
+
+<script>
+const fmt = n => n === null ? '' : (n<0?'−':'') + Math.round(Math.abs(n)).toLocaleString('es-AR');
+const S = 'sec', B = 'sub', T = 'tot';
+
+// [concepto, [valores], link (string o {i:link}), clase]
+const rowsER = [
+  ['Ingresos', null, null, S],
+  ['Ventas brutas', [2167500,2926125,3283112,3004595,2019088], 'ventas'],
+  ['Promoción (25.000 u. al costo)', [-38250,0,0,0,0], {0:'promo'}],
+  ['Ventas netas', [2129250,2926125,3283112,3004595,2019088], 'ventas', B],
+  ['Costos incrementales', null, null, S],
+  ['Costo variable', [-1785000,-2275875,-2553532,-2474372,-1766702], 'costo-var'],
+  ['Erosión de ventas del producto actual', [-76500,-195075,-273593,-265111,-189289], 'erosion'],
+  ['Publicidad anual', [-51000,-52020,-53060,-54122,0], 'publicidad'],
+  ['Mano de obra (3 operarios)', [-29376,-29964,-30563,-31174,-31798], 'mano-obra'],
+  ['Alquiler resignado del galpón', [-42840,-43697,-44571,-45462,-46371], 'alquiler'],
+  ['EBITDA', [144534,329495,327794,134354,-15072], 'ebitda', B],
+  ['Amortización matriz', [-7500,-7500,-7500,-7500,-7500], 'amortizacion'],
+  ['EBIT', [137034,321995,320294,126854,-22572], 'ebitda', B],
+  ['Resultado por venta de la matriz', [0,0,0,0,17704], {4:'venta-matriz'}],
+  ['Resultado antes de impuestos', [137034,321995,320294,126854,-4868]],
+  ['Impuesto a las ganancias (35%)', [-47962,-112698,-112103,-44399,1704], 'impuesto'],
+  ['Resultado neto', [89072,209297,208191,82455,-3164], 'impuesto', T],
+];
+const rowsFCF = [
+  ['Del resultado a la caja', null, null, S],
+  ['Resultado neto (versión 4 años)', [null,89072,209297,208191,88384], {4:'resultado-4'}],
+  ['+ Amortización', [null,7500,7500,7500,7500], 'amortizacion'],
+  ['+ Valor libros de la matriz vendida', [null,null,null,null,45000], {4:'rescate'}],
+  ['Inversiones', null, null, S],
+  ['Matriz (CAPEX)', [-75000,null,null,null,null]],
+  ['Saldo de capital de trabajo', [212925,292612,328311,300459,0], 'ctn'],
+  ['Inversión en capital de trabajo (−ΔCTN)', [-212925,-79687,-35699,27852,300459], 'ctn'],
+  ['Flujo de fondos libre nominal', [-287925,16885,181098,243543,441343], 'fcf', T],
+  ['Flujo de fondos libre real (moneda de hoy)', [-287925,16554,174066,229496,407733], 'real', B],
+  ['Descuento a WACC = 9,276%', null, null, S],
+  ['Factor de descuento', ['1,0000','0,9151','0,8374','0,7664','0,7013'], 'descuento'],
+  ['Valor presente del FCF', [-287925,15451,151659,186641,309517], 'descuento'],
+  ['VP acumulado', [-287925,-272474,-120815,65826,375343], 'payback-desc', B],
+  ['FCF acumulado (sin descontar)', [-287925,-271040,-89943,153600,594943], 'payback'],
+];
+
+function build(id, rows, ncol){
+  const tb = document.getElementById(id);
+  rows.forEach(([name, vals, link, cls]) => {
+    const tr = document.createElement('tr'); if (cls) tr.className = cls;
+    if (!vals) { tr.innerHTML = `<td colspan="${ncol+1}">${name}</td>`; tb.appendChild(tr); return; }
+    let h = `<td>${name}</td>`;
+    vals.forEach((v,i) => {
+      if (v === null) { h += `<td class="dash">–</td>`; return; }
+      const txt = typeof v === 'string' ? v : fmt(v);
+      const neg = typeof v === 'number' && v < 0 ? ' neg' : '';
+      const l = link && (typeof link === 'string' ? link : link[i]);
+      h += l ? `<td><a class="calc${neg}" href="#${l}">${txt}</a></td>` : `<td class="${neg.trim()}">${txt}</td>`;
+    });
+    tr.innerHTML = h; tb.appendChild(tr);
+  });
+}
+build('tb-er', rowsER, 5);
+build('tb-fcf', rowsFCF, 5);
+
+// ---------- Detalles ----------
+const D = {
+ventas:{t:'Ventas: unidades, precios e inflación',
+ dato:'250.000 unidades el año 1 a U$S 8,5. Año 2: precio 9 y volumen +25%. Año 3: volumen +10%. Año 4: precio 8,5 y volumen −5%. Año 5: precio 8 y volumen −30%. Montos en valores de hoy; inflación 2% anual.',
+ que:'Primero se proyectan las unidades encadenando los crecimientos. Después se multiplica por el precio en moneda de hoy y se lleva a nominal con \\((1{,}02)^t\\).',
+ tabla:[['','Año 1','Año 2','Año 3','Año 4','Año 5'],['Unidades','250.000','312.500','343.750','326.563','228.594'],['Precio de hoy','8,50','9,00','9,00','8,50','8,00'],['Índice (1,02)ᵗ','1,0200','1,0404','1,0612','1,0824','1,1041'],['Ventas nominales',2167500,2926125,3283112,3004595,2019088]],
+ f:['Q_t = Q_{t-1}\\,(1+g_t) \\qquad \\text{Ventas}_t = Q_t \\times P_t \\times (1{,}02)^t'],
+ s:['\\text{Ventas}_1 = 250.000 \\times 8{,}5 \\times 1{,}02 = 2.167.500',
+    'Q_2 = 250.000 \\times 1{,}25 = 312.500 \\;\\Rightarrow\\; \\text{Ventas}_2 = 312.500 \\times 9 \\times 1{,}0404 = 2.926.125',
+    'Q_5 = 326.562{,}5 \\times 0{,}70 = 228.593{,}75 \\;\\Rightarrow\\; \\text{Ventas}_5 = 228.593{,}75 \\times 8 \\times 1{,}1041 = 2.019.088'],
+ r:'Año 1: 2.167.500 · Año 5: 2.019.088', rel:['promo','costo-var','erosion','ctn']},
+promo:{t:'Promoción versus publicidad de lanzamiento',
+ dato:'Publicidad: U$S 100.000 antes del lanzamiento. Alternativa del jefe de producto: vender las primeras 25.000 unidades al costo (U$S 7 en lugar de 8,5). Ambas logran el mismo volumen.',
+ que:'Si las dos alternativas generan las mismas ventas, se elige la más barata. Se comparan los costos después de impuestos y en valor actual. La publicidad anual de 50.000 sigue en los dos casos: la promoción solo reemplaza la de lanzamiento.',
+ f:['\\text{Costo neto} = \\text{Costo} \\times (1-T) \\qquad \\text{VA} = \\dfrac{\\text{Costo neto}_t}{(1+\\text{WACC})^t}'],
+ s:['\\text{Publicidad} = 100.000 \\times (1-0{,}35) = 65.000 \\text{ en } t=0',
+    '\\text{Promoción} = 25.000 \\times (8{,}5-7) \\times 1{,}02 = 38.250 \\text{ de menor venta en } t=1',
+    '\\text{Promoción neta} = 38.250 \\times 0{,}65 = 24.863 \\;\\Rightarrow\\; \\text{VA} = \\dfrac{24.863}{1{,}09276} = 22.752'],
+ r:'Se elige la promoción: 22.752 contra 65.000',
+ extra:'<p>La promoción cuesta un tercio que la publicidad, porque es más chica, se paga un año después y como menor ingreso. Se descuenta con el <a class="calc" href="#wacc">WACC</a>, que se calcula en el punto c.</p>',
+ rel:['ventas','wacc']},
+'costo-var':{t:'Costo variable',
+ dato:'Costo variable de U$S 7 por unidad, en valores de hoy.',
+ que:'Se aplica a todas las unidades, incluidas las 25.000 de la promoción.',
+ f:['\\text{CV}_t = Q_t \\times 7 \\times (1{,}02)^t'],
+ s:['\\text{CV}_1 = 250.000 \\times 7 \\times 1{,}02 = 1.785.000','\\text{CV}_2 = 312.500 \\times 7 \\times 1{,}0404 = 2.275.875'],
+ r:'Año 1: 1.785.000', rel:['ventas','ebitda']},
+erosion:{t:'Erosión de ventas del producto actual',
+ dato:'Parte de las ventas nuevas son clientes del producto actual (precio 7,5, costo 6): 20% de las unidades del año 1, 40% del año 2 y 50% del resto.',
+ que:'Esas ventas existirían sin el proyecto. Lo que se pierde no es la venta completa sino el margen: el costo de 6 también desaparece. Margen perdido: 7,5 − 6 = 1,5 por unidad.',
+ tabla:[['','Año 1','Año 2','Año 3','Año 4','Año 5'],['% que migra','20%','40%','50%','50%','50%'],['Unidades que migran','50.000','125.000','171.875','163.281','114.297'],['Margen perdido (nominal)',-76500,-195075,-273593,-265111,-189289]],
+ f:['\\text{Erosión}_t = Q_t \\times \\%_t \\times (7{,}5 - 6) \\times (1{,}02)^t'],
+ s:['\\text{Erosión}_1 = 250.000 \\times 0{,}20 \\times 1{,}5 \\times 1{,}02 = 76.500','\\text{Erosión}_2 = 312.500 \\times 0{,}40 \\times 1{,}5 \\times 1{,}0404 = 195.075'],
+ r:'Año 1: −76.500 · Año 2: −195.075', rel:['ebitda','mano-obra']},
+publicidad:{t:'Publicidad anual',
+ dato:'U$S 50.000 anuales durante los primeros 4 años, en valores de hoy. Sin esta campaña no se logra el volumen proyectado.',
+ que:'Es un gasto incremental: sin proyecto no existiría. En el año 5 ya no hay publicidad.',
+ f:['\\text{Publicidad}_t = 50.000 \\times (1{,}02)^t \\quad (t = 1,\\dots,4)'],
+ s:['\\text{Publicidad}_1 = 50.000 \\times 1{,}02 = 51.000','\\text{Publicidad}_4 = 50.000 \\times 1{,}0824 = 54.122'],
+ r:'Año 1: −51.000 · Año 4: −54.122', rel:['promo','ebitda']},
+'mano-obra':{t:'Mano de obra incremental',
+ dato:'Se necesitan 5 operarios, con un costo total de U$S 48.000 anuales. Dos se reasignan desde la línea del producto actual desde el año 1.',
+ que:'Los 2 operarios reasignados ya se pagan hoy y se seguirían pagando sin el proyecto. El costo incremental es solo el de los 3 nuevos.',
+ f:['\\text{MO}_t = 48.000 \\times \\dfrac{3}{5} \\times (1{,}02)^t'],
+ s:['\\text{MO de hoy} = 48.000 \\times 0{,}6 = 28.800','\\text{MO}_1 = 28.800 \\times 1{,}02 = 29.376'],
+ r:'Año 1: −29.376', rel:['erosion','ebitda']},
+alquiler:{t:'Alquiler resignado del galpón (costo de oportunidad)',
+ dato:'El galpón es propio y hoy se alquila a un tercero a U$S 3.500 mensuales. El contrato vence en dos años.',
+ que:'No hay pago, pero si se usa el galpón para el proyecto se deja de cobrar el alquiler. Es un costo de oportunidad: se computa todos los años, suponiendo que al vencer el contrato el galpón se podría volver a alquilar.',
+ f:['\\text{Alquiler}_t = 3.500 \\times 12 \\times (1{,}02)^t'],
+ s:['\\text{Alquiler de hoy} = 3.500 \\times 12 = 42.000','\\text{Alquiler}_1 = 42.000 \\times 1{,}02 = 42.840'],
+ r:'Año 1: −42.840',
+ extra:'<p>Se expone en el estado de resultados porque es un ingreso gravado que la firma deja de percibir. Así queda claro que en el año 5 conviene volver a alquilar el galpón (ver <a class="calc" href="#abandono">abandono</a>).</p>',
+ rel:['ebitda','abandono']},
+ebitda:{t:'EBITDA y EBIT',
+ que:'Se restan a las ventas netas todos los costos incrementales. Después se resta la amortización para llegar al EBIT.',
+ f:['\\text{EBITDA} = \\text{Ventas netas} - \\text{CV} - \\text{Erosión} - \\text{Publicidad} - \\text{MO} - \\text{Alquiler}','\\text{EBIT} = \\text{EBITDA} - \\text{Amortización}'],
+ s:['\\text{EBITDA}_1 = 2.129.250 - 1.785.000 - 76.500 - 51.000 - 29.376 - 42.840 = 144.534','\\text{EBIT}_1 = 144.534 - 7.500 = 137.034',
+    '\\text{EBITDA}_5 = 2.019.088 - 1.766.702 - 189.289 - 0 - 31.798 - 46.371 = -15.072'],
+ r:'EBITDA año 1: 144.534 · año 5: −15.072', rel:['amortizacion','impuesto','abandono']},
+amortizacion:{t:'Amortización de la matriz',
+ dato:'Matriz de U$S 75.000, se amortiza contablemente en 10 años.',
+ que:'La amortización no es salida de caja, pero baja el impuesto. Se resta para llegar al EBIT y se vuelve a sumar en el flujo. No se ajusta por inflación: la ley amortiza el costo histórico.',
+ f:['\\text{Amort} = \\dfrac{\\text{Valor de origen}}{\\text{Vida útil contable}}'],
+ s:['\\text{Amort} = \\dfrac{75.000}{10} = 7.500'],
+ r:'7.500 por año (nominal fijo)',
+ extra:'<p>Consecuencia: con inflación, el ahorro fiscal por amortización (\\(7.500 \\times 0{,}35 = 2.625\\)) pierde valor real cada año. La inflación aumenta el impuesto real del proyecto.</p>',
+ rel:['ebitda','rescate']},
+'venta-matriz':{t:'Resultado por venta de la matriz (proyecto a 5 años)',
+ dato:'La matriz tendrá un valor de mercado de U$S 50.000 (valores de hoy) al final del proyecto.',
+ que:'Se compara el precio de venta nominal con el valor libros. La diferencia es una ganancia gravada.',
+ f:['\\text{VL}_5 = 75.000 - 5 \\times 7.500','\\text{Resultado} = \\text{Precio}_5 - \\text{VL}_5'],
+ s:['\\text{Precio}_5 = 50.000 \\times 1{,}02^5 = 55.204','\\text{VL}_5 = 37.500','\\text{Resultado} = 55.204 - 37.500 = 17.704'],
+ r:'+17.704 en el año 5', rel:['rescate','impuesto']},
+impuesto:{t:'Impuesto y resultado neto',
+ dato:'Alícuota del 35%. La firma tiene otras ganancias gravadas.',
+ que:'El impuesto se calcula sobre el resultado antes de impuestos. En el año 5 el resultado es negativo: el proyecto genera un ahorro de impuestos que la firma aprovecha contra sus otras ganancias.',
+ f:['\\text{Impuesto} = \\text{RAI} \\times T \\qquad \\text{Resultado neto} = \\text{RAI} \\times (1-T)'],
+ s:['\\text{Impuesto}_1 = 137.034 \\times 0{,}35 = 47.962 \\;\\Rightarrow\\; \\text{RN}_1 = 89.072',
+    '\\text{RAI}_5 = -22.572 + 17.704 = -4.868 \\;\\Rightarrow\\; \\text{Ahorro}_5 = 4.868 \\times 0{,}35 = 1.704'],
+ r:'RN año 1: 89.072 · año 5: −3.164', rel:['ebitda','venta-matriz','fcf']},
+'resultado-4':{t:'Resultado neto del año 4 (versión discontinuando)',
+ que:'Es el mismo resultado operativo del año 4, más la ganancia por vender la matriz al cierre de ese año.',
+ f:['\\text{VL}_4 = 75.000 - 4 \\times 7.500 = 45.000','\\text{Precio}_4 = 50.000 \\times 1{,}02^4 = 54.122'],
+ s:['\\text{Resultado venta} = 54.122 - 45.000 = 9.122','\\text{RAI}_4 = 126.854 + 9.122 = 135.975','\\text{RN}_4 = 135.975 \\times 0{,}65 = 88.384'],
+ r:'88.384 (contra 82.455 sin vender la matriz)',
+ extra:'<p>Se supone que el valor de mercado de la matriz, en moneda de hoy, es el mismo al final del año 4 que al final del año 5.</p>',
+ rel:['rescate','abandono','fcf']},
+rescate:{t:'Valor de recupero de la matriz: ¿por qué se suma el valor libros?',
+ que:'La ganancia por la venta (precio − valor libros) ya está adentro del resultado neto, neta de impuestos. Sumando el valor libros se completa el precio de venta. Las dos formas de verlo dan lo mismo:',
+ f:['\\text{Recupero neto} = \\text{Precio} - (\\text{Precio} - \\text{VL}) \\times T'],
+ s:['\\text{Recupero neto} = 54.122 - 9.122 \\times 0{,}35 = 54.122 - 3.193 = 50.929',
+    '\\text{En el flujo: } \\underbrace{45.000}_{\\text{VL}} + \\underbrace{9.122 \\times 0{,}65}_{\\text{dentro del RN}} = 45.000 + 5.929 = 50.929'],
+ r:'+45.000 en la tabla (+50.929 en total)', rel:['resultado-4','amortizacion','fcf']},
+ctn:{t:'Capital de trabajo neto',
+ dato:'Inversión en capital de trabajo equivalente al 10% de las ventas proyectadas.',
+ que:'El capital de trabajo se constituye un año antes de las ventas que financia: el saldo de fin del año t es el 10% de las ventas del año t+1. Al cerrar el proyecto vuelve a cero y se recupera todo.',
+ tabla:[['','Año 0','Año 1','Año 2','Año 3','Año 4'],['Ventas del año siguiente',2129250,2926125,3283112,3004595,'—'],['Saldo CTN (10%)',212925,292612,328311,300459,0],['ΔCTN',212925,79687,35699,-27852,-300459],['Flujo (−ΔCTN)',-212925,-79687,-35699,27852,300459]],
+ f:['\\text{CTN}_t = 0{,}10 \\times \\text{Ventas}_{t+1} \\qquad \\text{Flujo}_t = -(\\text{CTN}_t - \\text{CTN}_{t-1})'],
+ s:['\\text{CTN}_0 = 0{,}10 \\times 2.129.250 = 212.925','\\text{CTN}_1 = 0{,}10 \\times 2.926.125 = 292.612 \\;\\Rightarrow\\; \\text{Flujo}_1 = -(292.612 - 212.925) = -79.687',
+    '\\text{Flujo}_4 = -(0 - 300.459) = +300.459'],
+ r:'Año 0: −212.925 · Año 4: +300.459',
+ extra:'<p>Signo: si el CTN sube, se inmovilizan fondos (sale caja). Si baja, se liberan (entra caja). En el año 3 ya baja porque las ventas del año 4 son menores.</p>',
+ rel:['ventas','fcf']},
+fcf:{t:'Flujo de fondos libre (FCF) nominal',
+ que:'Se parte del resultado neto, se suman las partidas que no son salida de caja y se restan las inversiones.',
+ f:['\\text{FCF}_t = \\text{RN}_t + \\text{Amort}_t + \\text{VL}_{\\text{venta}} - \\text{CAPEX}_t - \\Delta\\text{CTN}_t'],
+ s:['\\text{FCF}_0 = -75.000 - 212.925 = -287.925',
+    '\\text{FCF}_1 = 89.072 + 7.500 - 79.687 = 16.885',
+    '\\text{FCF}_2 = 209.297 + 7.500 - 35.699 = 181.098',
+    '\\text{FCF}_3 = 208.191 + 7.500 + 27.852 = 243.543',
+    '\\text{FCF}_4 = 88.384 + 7.500 + 45.000 + 300.459 = 441.343'],
+ r:'−287.925 · 16.885 · 181.098 · 243.543 · 441.343',
+ extra:'<p>No se restan intereses: el costo de la deuda ya está en el <a class="calc" href="#wacc">WACC</a>.</p>',
+ rel:['ctn','rescate','real','descuento']},
+real:{t:'Flujo de fondos en términos reales',
+ que:'El flujo real expresa cada flujo nominal en dólares de hoy, dividiendo por el índice de precios. Regla de consistencia: flujos nominales con tasa nominal; flujos reales con tasa real.',
+ f:['\\text{FCF}^{\\text{real}}_t = \\dfrac{\\text{FCF}^{\\text{nom}}_t}{(1{,}02)^t}'],
+ s:['\\text{FCF}^{\\text{real}}_1 = \\dfrac{16.885}{1{,}02} = 16.554','\\text{FCF}^{\\text{real}}_4 = \\dfrac{441.343}{1{,}0824} = 407.733'],
+ r:'VAN real = VAN nominal = 375.343',
+ tabla:[['','Año 0','Año 1','Año 2','Año 3','Año 4'],['FCF real',-287925,16554,174066,229496,407733],['(1,07133)ᵗ','1,0000','1,0713','1,1477','1,2296','1,3173'],['VP a WACC real',-287925,15451,151659,186641,309517]],
+ extra:'<p>Los valores presentes son idénticos año por año a los nominales: es la misma cuenta expresada en otra moneda.</p>',
+ rel:['fcf','wacc-real','van']},
+abandono:{t:'¿Conviene llegar al año 5? Análisis de abandono',
+ que:'Que el EBITDA del año 5 sea negativo sugiere cortar, pero no alcanza: si se corta en el año 4 también se adelantan el recupero del CTN y la venta de la matriz. Hay que comparar los flujos de las dos alternativas.',
+ tabla:[['','Año 0','Año 1','Año 2','Año 3','Año 4','Año 5'],['FCF a 5 años',-287925,16885,181098,243543,188505,243744],['FCF cortando en año 4',-287925,16885,181098,243543,441343,'—'],['Diferencia (seguir)',0,0,0,0,-252838,243744]],
+ f:['\\text{Seguir un año más: dejar de cobrar en } t=4 \\text{ para cobrar en } t=5'],
+ s:['\\text{Rendimiento} = \\dfrac{243.744}{252.838} - 1 = -3{,}6\\% \\;<\\; \\text{WACC}',
+    '\\text{Valor de seguir} = \\dfrac{-252.838 + \\dfrac{243.744}{1{,}09276}}{1{,}09276^4} = -20.887'],
+ r:'Se discontinúa en el año 4',
+ extra:'<p>VAN a 4 años: 375.343. VAN a 5 años: 354.456. La diferencia, 20.887, es el valor de la opción de abandono. La vida óptima de un proyecto no es la que dice el enunciado sino la que maximiza el VAN.</p>',
+ rel:['ebitda','alquiler','van']},
+descuento:{t:'Factor de descuento y valor presente',
+ dato:'WACC nominal: 9,276%.',
+ que:'Cada flujo se trae a hoy dividiéndolo por (1 + WACC) elevado al año en que ocurre.',
+ f:['\\text{FD}_t = \\dfrac{1}{(1+\\text{WACC})^t} \\qquad \\text{VP}_t = \\text{FCF}_t \\times \\text{FD}_t'],
+ s:['\\text{VP}_1 = \\dfrac{16.885}{1{,}09276} = 15.451','\\text{VP}_2 = \\dfrac{181.098}{1{,}09276^2} = \\dfrac{181.098}{1{,}1941} = 151.659',
+    '\\text{VP}_3 = \\dfrac{243.543}{1{,}09276^3} = \\dfrac{243.543}{1{,}3049} = 186.641','\\text{VP}_4 = \\dfrac{441.343}{1{,}09276^4} = \\dfrac{441.343}{1{,}4259} = 309.517'],
+ r:'Suma VP años 1 a 4 = 663.268', rel:['van','payback-desc','wacc']},
+van:{t:'Valor actual neto (VAN)',
+ que:'Es la suma de todos los flujos descontados, incluida la inversión inicial. Si es positivo, el proyecto crea valor para los accionistas.',
+ f:['\\text{VAN} = \\sum_{t=0}^{4} \\dfrac{\\text{FCF}_t}{(1+\\text{WACC})^t}'],
+ s:['\\text{VAN} = -287.925 + \\dfrac{16.885}{1{,}09276} + \\dfrac{181.098}{1{,}09276^2} + \\dfrac{243.543}{1{,}09276^3} + \\dfrac{441.343}{1{,}09276^4}',
+    '\\text{VAN} = -287.925 + 15.451 + 151.659 + 186.641 + 309.517'],
+ r:'VAN = 375.343 → se acepta', rel:['descuento','tir','decision','accion-proyecto']},
+tir:{t:'Tasa interna de retorno (TIR)',
+ que:'Es la tasa que hace cero el VAN. Se busca por prueba y error (o con la función TIR de Excel).',
+ f:['0 = \\sum_{t=0}^{4} \\dfrac{\\text{FCF}_t}{(1+\\text{TIR})^t}'],
+ s:['0 = -287.925 + \\dfrac{16.885}{1{,}432} + \\dfrac{181.098}{1{,}432^2} + \\dfrac{243.543}{1{,}432^3} + \\dfrac{441.343}{1{,}432^4}',
+    '\\text{TIR}^{\\text{real}} = \\dfrac{1{,}432}{1{,}02} - 1 = 40{,}4\\%'],
+ r:'TIR nominal 43,2% > WACC 9,276%',
+ extra:'<p>Los flujos tienen un solo cambio de signo (negativo en t = 0, positivos después), así que la TIR es única y coincide con el VAN. Ver la discusión sobre <a class="calc" href="#reinversion">reinversión</a>.</p>',
+ rel:['van','reinversion']},
+payback:{t:'Payback simple',
+ que:'Cuánto tarda el proyecto en recuperar la inversión con flujos sin descontar. Se acumulan los FCF hasta que el acumulado cambia de signo.',
+ tabla:[['Año',0,1,2,3,4],['FCF',-287925,16885,181098,243543,441343],['Acumulado',-287925,-271040,-89943,153600,594943]],
+ f:['\\text{Payback} = (t-1) + \\dfrac{\\left|\\text{Acumulado}_{t-1}\\right|}{\\text{FCF}_t}'],
+ s:['\\text{Payback} = 2 + \\dfrac{89.943}{243.543} = 2 + 0{,}3693 \\text{ años}','0{,}3693 \\times 12 = 4{,}43 \\text{ meses}'],
+ r:'2 años y 5 meses',
+ extra:'<p>Se supone que el flujo del año 3 llega de manera pareja durante el año. La inversión se termina de recuperar en el transcurso del mes 5.</p>',
+ rel:['fcf','payback-desc']},
+'payback-desc':{t:'Payback descontado',
+ que:'Igual que el payback simple, pero acumulando los flujos ya descontados. Siempre da más largo que el simple porque los flujos futuros valen menos.',
+ tabla:[['Año',0,1,2,3,4],['VP del FCF',-287925,15451,151659,186641,309517],['VP acumulado',-287925,-272474,-120815,65826,375343]],
+ f:['\\text{Payback desc.} = (t-1) + \\dfrac{\\left|\\text{VP acum.}_{t-1}\\right|}{\\text{VP}_t}'],
+ s:['\\text{Payback desc.} = 2 + \\dfrac{120.815}{186.641} = 2 + 0{,}6473 \\text{ años}','0{,}6473 \\times 12 = 7{,}77 \\text{ meses}'],
+ r:'2 años y 8 meses',
+ extra:'<p>Ninguno de los dos paybacks mide creación de valor: ignoran lo que pasa después del recupero (acá, todo el año 4, con el recupero del CTN y la venta de la matriz). Son medidas de liquidez y de riesgo.</p>',
+ rel:['descuento','payback','decision']},
+decision:{t:'Decisión: ¿aceptar o rechazar?',
+ que:'El objetivo de la firma es crear valor para los accionistas. Cada criterio se lee en esa clave.',
+ html:`<ul>
+  <li><b>VAN = 375.343 > 0.</b> Descontados al rendimiento que exigen los inversores, los flujos superan la inversión. La diferencia es riqueza nueva para los accionistas: <b>se acepta</b>.</li>
+  <li><b>TIR = 43,2% > WACC = 9,276%.</b> El proyecto rinde más que las alternativas de igual riesgo: <b>se acepta</b>. Con flujos convencionales coincide con el VAN.</li>
+  <li><b>Payback simple (2 a 5 m).</b> Se acepta si el plazo objetivo es mayor. El plazo objetivo es arbitrario y el criterio ignora el valor tiempo del dinero.</li>
+  <li><b>Payback descontado (2 a 8 m).</b> Se acepta si el plazo objetivo es mayor. Si se recupera dentro de la vida del proyecto, el VAN acumulado ya es positivo en ese momento.</li>
+ </ul>`,
+ r:'Se acepta el proyecto', rel:['van','tir','payback','payback-desc']},
+'beta-sector':{t:'Paso 1: beta del sector',
+ dato:'Correlación sector–S&P 500: 0,85. Desvío del sector: 28%. Desvío del S&P 500: 20%.',
+ que:'La beta mide cuánto se mueve el rendimiento del sector cuando se mueve el mercado. Es la covarianza dividida por la varianza del mercado; con correlación y desvíos se escribe así:',
+ f:['\\beta = \\dfrac{\\text{Cov}(R_i,R_m)}{\\sigma_m^2} = \\rho_{i,m}\\,\\dfrac{\\sigma_i}{\\sigma_m}'],
+ s:['\\beta_L^{\\text{sector}} = 0{,}85 \\times \\dfrac{0{,}28}{0{,}20} = 0{,}85 \\times 1{,}4'],
+ r:'β sector = 1,19', rel:['beta-u']},
+'beta-u':{t:'Paso 2: desapalancar (Hamada)',
+ dato:'Estructura promedio del sector: 40% deuda, 60% capital propio. Alícuota del sector: 35%.',
+ que:'La beta del sector incluye el riesgo del negocio y el riesgo que agrega la deuda del sector. Se saca el efecto de la deuda para quedarse solo con el riesgo del negocio.',
+ f:['\\beta_U = \\dfrac{\\beta_L}{1 + (1-T)\\,\\dfrac{D}{E}}'],
+ s:['\\beta_U = \\dfrac{1{,}19}{1 + 0{,}65 \\times \\dfrac{40}{60}} = \\dfrac{1{,}19}{1{,}4333}'],
+ r:'βU = 0,8302', rel:['beta-sector','beta-l']},
+'beta-l':{t:'Paso 3: reapalancar con la estructura de la firma',
+ dato:'Deuda de largo plazo U$S 350.000, capital propio U$S 650.000. El proyecto mantiene ese ratio, que es el objetivo de la firma.',
+ que:'Se le pone a la beta del negocio el riesgo financiero de la firma. La firma tiene menos deuda que el sector (35% contra 40%), por eso su beta queda menor que la del sector.',
+ f:['\\beta_L = \\beta_U \\left[1 + (1-T)\\,\\dfrac{D}{E}\\right]'],
+ s:['\\dfrac{D}{E} = \\dfrac{350.000}{650.000} = 0{,}5385','\\beta_L = 0{,}8302 \\times (1 + 0{,}65 \\times 0{,}5385) = 0{,}8302 \\times 1{,}35'],
+ r:'β firma = 1,1208', rel:['beta-u','ke']},
+ke:{t:'Paso 4: costo del capital propio (CAPM)',
+ dato:'Tesoro de EE.UU. a 5 años: 3,35%. Rendimiento histórico del S&P 500: 12% anual.',
+ que:'El accionista exige la tasa libre de riesgo más un premio por cada unidad de riesgo sistemático. Se usa la tasa a 5 años porque coincide con el horizonte del proyecto.',
+ f:['k_e = r_f + \\beta_L \\left[E(R_m) - r_f\\right]'],
+ s:['k_e = 3{,}35\\% + 1{,}1208 \\times (12\\% - 3{,}35\\%) = 3{,}35\\% + 1{,}1208 \\times 8{,}65\\%','k_e = 3{,}35\\% + 9{,}695\\%'],
+ r:'kₑ = 13,045%', rel:['beta-l','wacc','accion']},
+kd:{t:'Paso 5: costo de la deuda',
+ dato:'Bono a 5 años, cupón 3% anual, rendimiento de mercado 3,5% anual.',
+ que:'El costo relevante es lo que el mercado exige hoy para prestarle a la firma: el rendimiento al vencimiento (3,5%). El cupón es la tasa pactada en la emisión y no refleja las condiciones actuales. Por eso el bono cotiza bajo la par.',
+ f:['P = \\sum_{t=1}^{5} \\dfrac{C}{(1+\\text{YTM})^t} + \\dfrac{100}{(1+\\text{YTM})^5}'],
+ s:['P = \\dfrac{3}{1{,}035} + \\dfrac{3}{1{,}035^2} + \\dfrac{3}{1{,}035^3} + \\dfrac{3}{1{,}035^4} + \\dfrac{103}{1{,}035^5} = 97{,}74','k_d\\,(1-T) = 3{,}5\\% \\times 0{,}65 = 2{,}275\\%'],
+ r:'kd = 3,5% (2,275% después de impuestos)', rel:['wacc']},
+wacc:{t:'Paso 6: costo promedio ponderado del capital (WACC)',
+ dato:'Estructura objetivo: 350.000 de deuda y 650.000 de capital propio → 35% D, 65% E.',
+ que:'Cada fuente de financiamiento pesa según su participación. La deuda entra neta del ahorro fiscal de los intereses.',
+ f:['\\text{WACC} = \\dfrac{E}{V}\\,k_e + \\dfrac{D}{V}\\,k_d\\,(1-T)'],
+ s:['\\text{WACC} = 0{,}65 \\times 13{,}045\\% + 0{,}35 \\times 3{,}5\\% \\times 0{,}65','\\text{WACC} = 8{,}479\\% + 0{,}796\\%'],
+ r:'WACC = 9,276%',
+ extra:'<p>Se usa la estructura objetivo a valores libros porque el enunciado la define así. A precio de mercado de la acción (punto g) la deuda sería solo el 8,5% del valor de la firma: el WACC subiría a 10,23% y el VAN sería 357.260. La decisión no cambia.</p>',
+ rel:['ke','kd','wacc-real','descuento']},
+'wacc-real':{t:'WACC real (ecuación de Fisher)',
+ dato:'Inflación proyectada: 2% anual.',
+ que:'Para descontar flujos reales hace falta una tasa real. No se resta la inflación: se divide.',
+ f:['1 + \\text{WACC}^{\\text{real}} = \\dfrac{1 + \\text{WACC}}{1 + \\pi}'],
+ s:['\\text{WACC}^{\\text{real}} = \\dfrac{1{,}09276}{1{,}02} - 1'],
+ r:'WACC real = 7,133%', rel:['wacc','real']},
+reinversion:{t:'e) ¿Tiene el VAN un problema de reinversión como la TIR?',
+ que:'Respuesta esperada por la cátedra: sí, formalmente. La TIR equivale a suponer que los flujos intermedios se reinvierten a la TIR; el VAN, que se reinvierten al costo del capital. La diferencia está en cuán razonable es cada supuesto.',
+ f:['\\text{VF} = \\sum_{t=1}^{T} \\text{FCF}_t\\,(1+r)^{T-t} \\quad\\Rightarrow\\quad \\dfrac{\\text{VF}}{(1+r)^T} - I_0 = \\sum_{t=1}^{T}\\dfrac{\\text{FCF}_t}{(1+r)^t} - I_0 = \\text{VAN}'],
+ html:`<p>Reinvertir al WACC es factible: es por definición el rendimiento de las alternativas de igual riesgo en el mercado. Reinvertir al 43,2% exigiría encontrar uno tras otro proyectos igual de buenos. Por eso la TIR modificada (MIRR) capitaliza los flujos al WACC.</p>
+ <div class="box dato"><span class="lbl">Para profundizar</span>En rigor, el VAN no necesita ningún supuesto sobre el destino de los flujos. Si la firma los distribuye, los accionistas los reinvierten por su cuenta al costo de oportunidad. Si la firma los usa en otro proyecto con VAN positivo, ese valor es de ese otro proyecto. Los problemas genuinos de la TIR son otros: escala, TIR múltiples y estructura temporal de tasas.</div>`,
+ r:'Sí en lo formal, pero el supuesto del VAN es razonable', rel:['tir','van']},
+'port-er':{t:'f) Rendimiento esperado y beta del portafolio',
+ dato:'80% en el sector, 10% en el activo libre de riesgo, 10% en el S&P 500. Horizonte: un año.',
+ que:'Con horizonte de un año, la tasa libre de riesgo es la del Tesoro a 1 año (2%). Primero se calcula con el CAPM el rendimiento del sector. El rendimiento y la beta del portafolio son promedios ponderados.',
+ f:['E(R_s) = r_f + \\beta_s\\left[E(R_m)-r_f\\right]','E(R_p) = \\sum w_i\\,E(R_i) \\qquad \\beta_p = \\sum w_i\\,\\beta_i'],
+ s:['E(R_s) = 2\\% + 1{,}19 \\times (12\\% - 2\\%) = 13{,}9\\%','E(R_p) = 0{,}8 \\times 13{,}9\\% + 0{,}1 \\times 2\\% + 0{,}1 \\times 12\\% = 12{,}52\\%','\\beta_p = 0{,}8 \\times 1{,}19 + 0{,}1 \\times 0 + 0{,}1 \\times 1 = 1{,}052'],
+ r:'E(Rp) = 12,52% · βp = 1,052', rel:['port-sd','port-capm']},
+'port-sd':{t:'f) Desvío estándar del portafolio',
+ que:'El desvío no es un promedio ponderado: depende de la correlación. El activo libre de riesgo no tiene varianza ni covarianza, así que quedan el sector, el mercado y su covarianza.',
+ f:['\\sigma_p^2 = w_s^2\\sigma_s^2 + w_m^2\\sigma_m^2 + 2\\,w_s w_m\\,\\rho_{s,m}\\,\\sigma_s\\sigma_m'],
+ s:['\\sigma_p^2 = 0{,}8^2 \\times 0{,}28^2 + 0{,}1^2 \\times 0{,}20^2 + 2 \\times 0{,}8 \\times 0{,}1 \\times 0{,}85 \\times 0{,}28 \\times 0{,}20','\\sigma_p^2 = 0{,}050176 + 0{,}000400 + 0{,}007616 = 0{,}058192','\\sigma_p = \\sqrt{0{,}058192}'],
+ r:'σp = 24,12%', rel:['port-er','port-capm']},
+'port-capm':{t:'f) Opinión y portafolio según el CAPM',
+ que:'El portafolio es ineficiente: concentra el 80% en un solo sector y asume riesgo propio del sector, que se podría eliminar diversificando. El CAPM solo paga por el riesgo sistemático (beta).',
+ f:['\\sigma_{\\text{sistemático}} = \\beta_p\\,\\sigma_m \\qquad E(R)_{\\text{LMC}} = r_f + \\dfrac{E(R_m)-r_f}{\\sigma_m}\\,\\sigma_p'],
+ s:['\\text{Mismo rendimiento con menos riesgo: } 1{,}052 \\times 20\\% = 21{,}04\\% \\text{ (en lugar de 24,12\\%)}','\\text{Más rendimiento con el mismo riesgo: } 2\\% + \\dfrac{10\\%}{20\\%} \\times 24{,}12\\% = 14{,}06\\% \\text{ (en lugar de 12,52\\%)}'],
+ r:'105,2% en el S&P 500, financiado con 5,2% de deuda a r_f',
+ extra:'<p>Según el teorema de separación del CAPM, todo inversor debería combinar solo el portafolio de mercado y el activo libre de riesgo. Para mantener su beta de 1,052, debe invertir el 105,2% en el mercado y tomar prestado el 5,2%.</p>',
+ rel:['port-er','port-sd']},
+accion:{t:'g) Valor de mercado de la acción',
+ dato:'Flujo de caja de los accionistas del último ejercicio: U$S 270.000. ROE 13% durante 4 años, retención del 60%. Desde el año 5 crece como el sector: 4,5%. 100.000 acciones.',
+ que:'El valor del patrimonio es el valor actual del flujo de los accionistas (FCFE), descontado al costo del capital propio. No se usa el WACC: el WACC descuenta flujos para todos los inversores. El crecimiento de la primera etapa es el sostenible: lo que se reinvierte por lo que rinde.',
+ tabla:[['','Año 1','Año 2','Año 3','Año 4'],['FCFE',291060,313763,338236,364619],['(1,13045)ᵗ','1,1305','1,2779','1,4446','1,6331'],['VP',257473,245526,234135,223271]],
+ f:['g_1 = \\text{ROE} \\times b','\\text{VT}_4 = \\dfrac{\\text{FCFE}_4\\,(1+g_2)}{k_e - g_2}','E_0 = \\sum_{t=1}^{4}\\dfrac{\\text{FCFE}_t}{(1+k_e)^t} + \\dfrac{\\text{VT}_4}{(1+k_e)^4}'],
+ s:['g_1 = 13\\% \\times 60\\% = 7{,}8\\% \\;\\Rightarrow\\; \\text{FCFE}_1 = 270.000 \\times 1{,}078 = 291.060',
+    '\\text{VT}_4 = \\dfrac{364.619 \\times 1{,}045}{0{,}13045 - 0{,}045} = \\dfrac{381.026}{0{,}08545} = 4.459.036',
+    'E_0 = 960.405 + \\dfrac{4.459.036}{1{,}6331} = 960.405 + 2.730.454 = 3.690.859',
+    'P_0 = \\dfrac{3.690.859}{100.000}'],
+ r:'P₀ = U$S 36,91 por acción',
+ extra:'<p>El 74% del valor está en el valor terminal: el resultado es muy sensible a \\(g_2\\) y a \\(k_e\\).</p>',
+ rel:['ke','accion-proyecto']},
+'accion-proyecto':{t:'h) Valor de la acción si se acepta el proyecto',
+ que:'El proyecto se financia manteniendo la estructura objetivo y la deuda nueva se toma a tasa de mercado (VAN cero para los acreedores). Todo el VAN queda para los accionistas.',
+ f:['P_0\' = P_0 + \\dfrac{\\text{VAN}}{N}'],
+ s:['P_0\' = 36{,}91 + \\dfrac{375.343}{100.000} = 36{,}91 + 3{,}75'],
+ r:'P₀ = U$S 40,66 (+10,2%)',
+ extra:'<p>Esta es la conexión con el objetivo de la firma: aceptar un proyecto con VAN positivo aumenta la riqueza del accionista exactamente en ese VAN. Sin la opción de abandono (proyecto a 5 años) el precio sería 40,45.</p>',
+ rel:['van','accion','abandono']},
+};
+
+const titles = Object.fromEntries(Object.entries(D).map(([k,v])=>[k,v.t]));
+function miniTable(t){
+  const isNum = v => typeof v === 'number';
+  let h = '<div class="tbl mini"><table><thead><tr>'+t[0].map(c=>`<th>${typeof c==='number'?'Año '+c:c}</th>`).join('')+'</tr></thead><tbody>';
+  t.slice(1).forEach(r=>{ h+='<tr>'+r.map((c,i)=> i===0?`<td>${c}</td>`:`<td class="${isNum(c)&&c<0?'neg':''}">${isNum(c)?fmt(c):c}</td>`).join('')+'</tr>'; });
+  return h+'</tbody></table></div>';
+}
+function render(){
+  const id = location.hash.slice(1);
+  const tv = document.getElementById('view-tabla'), dv = document.getElementById('view-det');
+  if (!id || !D[id]) {
+    tv.hidden=false; dv.hidden=true;
+    const anchor = id && document.getElementById(id);
+    if (anchor) anchor.scrollIntoView(); else window.scrollTo(0,0);
+    return;
+  }
+  const d = D[id];
+  let h = `<p class="where">Caso The New Fragance · detalle del cálculo</p><h1>${d.t}</h1>`;
+  if (d.dato) h += `<div class="box dato"><span class="lbl">Dato del enunciado</span>${d.dato}</div>`;
+  if (d.que) h += `<p>${d.que}</p>`;
+  if (d.tabla) h += miniTable(d.tabla);
+  if (d.f) h += `<h3>Fórmula</h3><div class="box">${d.f.map(x=>`\\[${x}\\]`).join('')}</div>`;
+  if (d.s) h += `<h3>Reemplazando</h3><div class="box">${d.s.map(x=>`<div class="step">\\[${x}\\]</div>`).join('')}</div>`;
+  if (d.html) h += d.html;
+  if (d.r) h += `<div class="answer"><span class="k">Resultado</span><span class="v">${d.r}</span></div>`;
+  if (d.extra) h += d.extra;
+  if (d.rel) h += `<h3>Relacionado</h3><div class="related">${d.rel.map(r=>`<a class="calc" href="#${r}">${titles[r]}</a>`).join('')}</div>`;
+  document.getElementById('det').innerHTML = h;
+  tv.hidden=true; dv.hidden=false; window.scrollTo(0,0);
+  typeset(document.getElementById('det'));
+}
+function typeset(el){
+  if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetClear && MathJax.typesetClear([el]); MathJax.typesetPromise([el]).catch(()=>{}); }
+  else setTimeout(()=>typeset(el), 150);
+}
+window.addEventListener('hashchange', render);
+render();
+typeset(document.getElementById('view-tabla'));
+</script>
+</body>
+</html>

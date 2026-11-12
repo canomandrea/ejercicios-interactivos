@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Caso Torredo S.A.</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<script>
+window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] }, svg: { fontCache: 'global' }, startup: { typeset: false } };
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.min.js"></script>
+<style>
+/* Layout: una columna académica; tabla ancha con scroll propio; vistas de detalle por hash */
+:root{
+  --bg:#ffffff; --fg:#14213d; --muted:#5b6782; --line:#d7deea; --soft:#f2f5fb;
+  --accent:#1f4e9c; --link:#1f4e9c; --linkbg:#e6eefb; --neg:#a3301f; --total:#eaf0fa;
+  --serif:"STIX Two Text","Cambria","Georgia",serif; --mono:"IBM Plex Mono","Consolas",monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f1524; --fg:#e4e9f4; --muted:#9aa6c0; --line:#2a3550; --soft:#161f33;
+  --accent:#8db4f5; --link:#9cc0ff; --linkbg:#1c2a48; --neg:#f09a8a; --total:#1a2540; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f1524; --fg:#e4e9f4; --muted:#9aa6c0; --line:#2a3550; --soft:#161f33;
+  --accent:#8db4f5; --link:#9cc0ff; --linkbg:#1c2a48; --neg:#f09a8a; --total:#1a2540; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--serif);font-size:17px;line-height:1.5}
+.wrap{max-width:1040px;margin:0 auto;padding-block:28px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header .eyebrow{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+h1{font-size:34px;margin:4px 0 6px;font-weight:700;text-wrap:balance}
+h2{font-size:23px;margin:36px 0 10px;text-wrap:balance}
+h3{font-size:18px;margin:22px 0 6px}
+p{margin:0 0 12px;max-width:68ch}
+.lead{color:var(--muted)}
+.hint{display:inline-flex;gap:8px;align-items:center;font-size:15px;color:var(--muted);margin:6px 0 14px}
+.hint .chip{font-family:var(--mono);font-size:13px;background:var(--linkbg);color:var(--link);border-bottom:1.5px solid var(--link);padding:1px 6px;border-radius:3px}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:4px}
+table{border-collapse:collapse;width:100%;min-width:760px;font-variant-numeric:tabular-nums}
+th,td{padding:7px 12px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+th:first-child,td:first-child{text-align:left;white-space:normal;min-width:220px}
+thead th{background:var(--soft);font-weight:600;font-size:15px;border-bottom:2px solid var(--accent)}
+td{font-family:var(--mono);font-size:14.5px}
+td:first-child{font-family:var(--serif);font-size:16px}
+tr.sec td{background:var(--soft);font-family:var(--serif);font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding-top:12px}
+tr.sub td{font-weight:600}
+tr.sub td:first-child{font-weight:700}
+tr.tot td{background:var(--total);font-weight:600;border-top:2px solid var(--accent);border-bottom:2px solid var(--accent)}
+.neg{color:var(--neg)}
+.dash{color:var(--muted)}
+a.calc{color:var(--link);background:var(--linkbg);text-decoration:none;border-bottom:1.5px solid var(--link);padding:1px 5px;border-radius:3px}
+a.calc:hover,a.calc:focus-visible{background:var(--link);color:var(--bg);outline:none}
+a.calc.neg{color:var(--neg);border-bottom-color:var(--neg)}
+a.calc.neg:hover{background:var(--neg);color:var(--bg)}
+.results{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:8px}
+.res{border:1px solid var(--line);border-top:3px solid var(--accent);padding:12px 14px;text-decoration:none;color:var(--fg);display:block}
+.res:hover,.res:focus-visible{background:var(--linkbg);outline:none}
+.res .k{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.res .v{font-family:var(--mono);font-size:22px;color:var(--link);margin-top:4px}
+.res .s{font-size:14px;color:var(--muted)}
+.notes{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.notes > div{min-width:0}
+ul{margin:0 0 12px;padding-left:20px} li{margin-bottom:6px;max-width:66ch}
+.mono{font-family:var(--mono);font-size:.9em}
+/* Detalle */
+.back{display:inline-flex;align-items:center;gap:6px;font-size:15px;color:var(--link);text-decoration:none;border:1px solid var(--line);padding:6px 12px;border-radius:4px}
+.back:hover,.back:focus-visible{background:var(--linkbg);outline:none}
+.det{max-width:760px}
+.det .where{font-size:14px;color:var(--muted);margin-top:14px}
+.box{background:var(--soft);border-left:3px solid var(--accent);padding:14px 18px;margin:12px 0 16px;overflow-x:auto}
+.box.dato{border-left-color:var(--muted);font-style:italic}
+.box .lbl{font-style:normal;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px}
+.step{margin:4px 0}
+.answer{display:flex;flex-wrap:wrap;gap:10px;align-items:baseline;border:2px solid var(--accent);padding:10px 16px;margin:8px 0 18px}
+.answer .k{font-size:14px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.answer .v{font-family:var(--mono);font-size:22px;color:var(--accent)}
+.related{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.related a{font-size:14px}
+mjx-container{max-width:100%;overflow-x:auto;overflow-y:hidden}
+mjx-container[display="true"]{margin:6px 0!important}
+.mini{min-width:0;margin:6px 0 14px}
+.mini table{min-width:520px}
+nav.toc{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 4px}
+nav.toc a{font-size:14px;color:var(--link);text-decoration:none;border:1px solid var(--line);padding:4px 10px;border-radius:4px}
+nav.toc a:hover{background:var(--linkbg)}
+.chain{display:flex;flex-wrap:wrap;align-items:stretch;gap:8px;margin-top:8px}
+.chain .res{flex:1 1 130px}
+.chain .arr{align-self:center;color:var(--muted);font-size:20px}
+.callout{border:1px solid var(--line);border-left:4px solid var(--neg);padding:12px 16px;margin:16px 0}
+.callout b{color:var(--neg)}
+.results.r3{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media (max-width:720px){.results{grid-template-columns:1fr 1fr}.notes{grid-template-columns:1fr}h1{font-size:28px}}
+@media (prefers-reduced-motion:no-preference){a,.res{transition:background .15s,color .15s}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <section id="view-tabla">
+    <header>
+      <div class="eyebrow">Finanzas de Empresa · Proyectos de inversión · Ejercicio 8</div>
+      <h1>Caso Torredo S.A.: ¿invertir el excedente o repartirlo?</h1>
+      <p class="lead">Curtiembre sin crecimiento que evalúa producir ropa de cuero. Horizonte de 4 años. Costo del capital \(\text{WACC} = 14{,}36842\%\), alícuota \(T = 30\%\). Cifras en pesos.</p>
+      <div class="hint"><span class="chip">1.234</span> Los números resaltados requieren un cálculo. Hacé click para ver el detalle paso a paso.</div>
+      <nav class="toc">
+        <a href="#sec-firma">a) Valor de la firma</a><a href="#sec-relevantes">Qué entra</a><a href="#sec-flujo">b) Flujo del proyecto</a><a href="#sec-res">b–d) Resultados</a>
+      </nav>
+    </header>
+
+    <h2 id="sec-firma">a) Valor de Torredo sin el proyecto</h2>
+    <p class="lead">La firma no crece: su flujo libre se repite a perpetuidad y se descuenta al WACC.</p>
+    <div class="chain">
+      <a class="res" href="#fcff-firma"><div class="k">FCFF de la firma</div><div class="v">273.000</div><div class="s">EBIT(1−T) + Dep − Capex − ΔCTN</div></a><span class="arr">→</span>
+      <a class="res" href="#valor-firma"><div class="k">Valor de la firma</div><div class="v">1.900.000</div><div class="s">perpetuidad sin crecimiento</div></a><span class="arr">→</span>
+      <a class="res" href="#wacc"><div class="k">¿De dónde sale el WACC?</div><div class="v">14,368%</div><div class="s">pesos a valor de mercado</div></a>
+    </div>
+
+    <h2 id="sec-relevantes">Qué entra y qué no entra en el proyecto</h2>
+    <div class="notes">
+      <div>
+        <h3>Se incluye (es incremental)</h3>
+        <ul>
+          <li>Las refacciones del inmueble ($500.000) y la maquinaria ($350.000), con sus amortizaciones y su <a class="calc" href="#recupero">valor de recupero</a>.</li>
+          <li>Los <a class="calc" href="#habilitaciones">gastos de habilitación</a> ($60.000): son gastos, no activos, y generan ahorro de impuestos en el año 0.</li>
+          <li>El <a class="calc" href="#ahorro-cuero">ahorro de costos en la curtiembre</a> ($30.000 por año): es un efecto positivo sobre el negocio actual.</li>
+          <li>El cuero que se provee la propia empresa: se computa a su costo ($50 por prenda), porque se usa en lugar de venderlo o de dejar de producirlo.</li>
+          <li>La publicidad anual y el capital de trabajo, que <a class="calc" href="#ctn">baja en el año 1</a>.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>No se incluye</h3>
+        <ul>
+          <li>Los $75.000 de la consultora Sabia S.A.: aunque estén impagos, se deben con o sin proyecto. Es un costo hundido.</li>
+          <li>Los intereses de la deuda: el flujo es del proyecto (FCFF) y el costo de la deuda ya está en el WACC.</li>
+          <li>El "flujo de efectivo operativo" de $435.000 del enunciado: no se usa para valuar la firma (ver <a class="calc" href="#fcff-firma">FCFF</a>).</li>
+        </ul>
+      </div>
+    </div>
+
+    <h2 id="sec-flujo">b) Flujo de fondos incremental del proyecto</h2>
+    <p class="lead">Convención de la guía: los activos fijos amortizan también el último año y se venden en el período siguiente (año 5). El capital de trabajo se recupera en el año 4.</p>
+    <div class="tbl">
+    <table>
+      <thead><tr><th>Concepto</th><th>Año 0</th><th>Año 1</th><th>Año 2</th><th>Año 3</th><th>Año 4</th><th>Año 5</th></tr></thead>
+      <tbody id="tb"></tbody>
+    </table>
+    </div>
+
+    <h2 id="sec-res">b–d) Resultados</h2>
+    <div class="results">
+      <a class="res" href="#van"><div class="k">VAN</div><div class="v">491.814</div><div class="s">a WACC = 14,368%</div></a>
+      <a class="res" href="#ir"><div class="k">Índice de rentabilidad</div><div class="v">1,472</div><div class="s">VP flujos / I₀</div></a>
+      <a class="res" href="#payback"><div class="k">Payback simple</div><div class="v">2 a 4 m</div><div class="s">flujos sin descontar</div></a>
+      <a class="res" href="#payback-desc"><div class="k">Payback descontado</div><div class="v">3 años</div><div class="s">2 a 11 m y días</div></a>
+    </div>
+    <div class="results r3" style="margin-top:12px">
+      <a class="res" href="#tir"><div class="k">TIR</div><div class="v">33,54%</div><div class="s">&gt; WACC 14,368%</div></a>
+      <a class="res" href="#decision"><div class="k">b) ¿Invertir o repartir?</div><div class="v" style="font-size:18px">Invertir</div><div class="s">el VAN es positivo</div></a>
+      <a class="res" href="#valor-con-proyecto"><div class="k">d) Valor con el proyecto</div><div class="v">2.391.814</div><div class="s">1.900.000 + VAN</div></a>
+    </div>
+    <p class="lead" style="margin-top:12px">Ver también la <a href="#nota-clave" style="color:var(--link)">nota sobre la clave de respuestas</a>.</p>
+  </section>
+
+  <section id="view-det" hidden>
+    <a class="back" href="#tabla">← Volver a la tabla</a>
+    <div class="det" id="det"></div>
+  </section>
+</div>
+
+<script>
+const fmt = n => n === null ? '' : (n<0?'−':'') + Math.round(Math.abs(n)).toLocaleString('es-AR');
+const S = 'sec', B = 'sub', T = 'tot';
+const rows = [
+  ['Resultado incremental', null, null, S],
+  ['Ventas (8.000 prendas × $250)', [null,2000000,2000000,2000000,2000000,null], 'ventas'],
+  ['Costos variables (8.000 × $130)', [null,-1040000,-1040000,-1040000,-1040000,null], 'costos-var'],
+  ['Costos fijos', [null,-200000,-200000,-200000,-200000,null]],
+  ['Ahorro de costos en la curtiembre', [null,30000,30000,30000,30000,null], 'ahorro-cuero'],
+  ['Publicidad y ferias', [null,-200000,-200000,-200000,-200000,null]],
+  ['Gastos de habilitación', [-60000,null,null,null,null,null], 'habilitaciones'],
+  ['Amortizaciones', [null,-120000,-120000,-120000,-120000,null], 'amortizacion'],
+  ['Resultado antes de impuestos', [-60000,470000,470000,470000,470000,null], 'uai', B],
+  ['Impuesto (30%)', [18000,-141000,-141000,-141000,-141000,null], {0:'habilitaciones',1:'uai',2:'uai',3:'uai',4:'uai'}],
+  ['Resultado neto', [-42000,329000,329000,329000,329000,null], 'uai', B],
+  ['+ Amortizaciones', [null,120000,120000,120000,120000,null], 'amortizacion'],
+  ['Flujo operativo (FEO)', [-42000,449000,449000,449000,449000,null], 'feo', B],
+  ['Inversiones', null, null, S],
+  ['Refacciones + maquinaria (CAPEX)', [-850000,null,null,null,null,null], 'capex'],
+  ['Recupero neto de activos fijos', [null,null,null,null,null,272000], 'recupero'],
+  ['Necesidad de capital de trabajo', [150000,120000,120000,120000,0,null], 'ctn'],
+  ['Inversión en capital de trabajo (−ΔCTN)', [-150000,30000,0,0,120000,null], 'ctn'],
+  ['Flujo de fondos libre (FCF)', [-1042000,479000,449000,449000,569000,272000], 'fcf', T],
+  ['Descuento a WACC = 14,36842%', null, null, S],
+  ['Factor de descuento', ['1,0000','0,8744','0,7645','0,6685','0,5845','0,5111'], 'descuento'],
+  ['Valor presente del FCF', [-1042000,418822,343269,300143,332574,139008], 'descuento'],
+  ['VP acumulado', [-1042000,-623178,-279909,20233,352807,491814], 'payback-desc', B],
+  ['FCF acumulado (sin descontar)', [-1042000,-563000,-114000,335000,904000,1176000], 'payback'],
+];
+const tb = document.getElementById('tb');
+rows.forEach(([name, vals, link, cls]) => {
+  const tr = document.createElement('tr'); if (cls) tr.className = cls;
+  if (!vals) { tr.innerHTML = `<td colspan="7">${name}</td>`; tb.appendChild(tr); return; }
+  let h = `<td>${name}</td>`;
+  vals.forEach((v,i) => {
+    if (v === null) { h += `<td class="dash">–</td>`; return; }
+    const txt = typeof v === 'string' ? v : fmt(v);
+    const neg = typeof v === 'number' && v < 0 ? ' neg' : '';
+    const l = link && (typeof link === 'string' ? link : link[i]);
+    h += l ? `<td><a class="calc${neg}" href="#${l}">${txt}</a></td>` : `<td class="${neg.trim()}">${txt}</td>`;
+  });
+  tr.innerHTML = h; tb.appendChild(tr);
+});
+
+const D = {
+'fcff-firma':{t:'a) Flujo de fondos libre de la firma (FCFF)',
+ dato:'Último ejercicio: EBIT $390.000, amortizaciones $150.000, inversiones en activos fijos $200.000, el capital de trabajo se redujo $50.000. Alícuota 30%. La firma no crece.',
+ que:'El FCFF es la caja que genera el negocio para todos los que lo financian (accionistas y acreedores). Se parte del EBIT, no del resultado neto, porque los intereses son un pago a los acreedores y quedan dentro del WACC.',
+ f:['\\text{FCFF} = \\text{EBIT}\\,(1-T) + \\text{Amort} - \\text{Capex} - \\Delta\\text{CTN}'],
+ s:['\\text{FCFF} = 390.000 \\times (1-0{,}30) + 150.000 - 200.000 - (-50.000)','\\text{FCFF} = 273.000 + 150.000 - 200.000 + 50.000'],
+ r:'FCFF = 273.000',
+ extra:'<p>Ojo con el signo del capital de trabajo: si se <em>redujo</em>, liberó caja, así que suma. El "flujo de efectivo operativo" de $435.000 del enunciado es el resultado neto más amortizaciones más intereses (\\(245.000 + 150.000 + 40.000\\)): no sirve para valuar la firma porque no descuenta las inversiones ni separa el efecto fiscal de los intereses.</p>',
+ rel:['valor-firma','wacc']},
+'valor-firma':{t:'a) Valor de la firma sin el proyecto',
+ que:'Sin crecimiento, el FCFF se repite todos los años para siempre. El valor es una perpetuidad descontada al WACC, porque el FCFF es para todos los inversores.',
+ f:['V_0 = \\dfrac{\\text{FCFF}}{\\text{WACC}}'],
+ s:['V_0 = \\dfrac{273.000}{0{,}1436842}'],
+ r:'V = 1.900.000',
+ extra:'<p>Este es el valor de la firma, deuda más acciones. El valor de las acciones es \\(1.900.000 - 500.000 = 1.400.000\\).</p>',
+ rel:['fcff-firma','wacc','valor-con-proyecto']},
+wacc:{t:'¿De dónde sale el WACC de 14,36842%?',
+ dato:'Deuda $500.000 al 8%. Patrimonio neto contable $1.200.000. Rentabilidad pretendida por los accionistas 17,5%. Alícuota 30%.',
+ que:'El dato del WACC viene dado, pero se puede verificar. Con el patrimonio contable no da: el WACC se pondera con el patrimonio a valor de mercado (1.400.000, punto a), no con el contable.',
+ f:['\\text{WACC} = \\dfrac{E}{V}\\,k_e + \\dfrac{D}{V}\\,k_d\\,(1-T)'],
+ s:['\\text{Con valores contables: } \\dfrac{1.200.000}{1.700.000} \\times 17{,}5\\% + \\dfrac{500.000}{1.700.000} \\times 8\\% \\times 0{,}7 = 14{,}00\\%',
+    '\\text{Con valores de mercado: } \\dfrac{1.400.000}{1.900.000} \\times 17{,}5\\% + \\dfrac{500.000}{1.900.000} \\times 8\\% \\times 0{,}7 = 12{,}895\\% + 1{,}474\\%'],
+ r:'WACC = 14,36842% (a valores de mercado)',
+ extra:'<p>Se confirma por el lado del accionista: el flujo del accionista es \\(245.000 + 150.000 - 200.000 + 50.000 + 0 = 245.000\\) (la deuda no cambia). A perpetuidad, \\(245.000 / 0{,}175 = 1.400.000\\), el mismo valor de las acciones. Todo cierra.</p>',
+ rel:['valor-firma','descuento']},
+ventas:{t:'Ventas incrementales',
+ dato:'Ventas anuales estimadas: 8.000 prendas a un precio promedio de $250.',
+ f:['\\text{Ventas} = Q \\times P'], s:['\\text{Ventas} = 8.000 \\times 250'],
+ r:'2.000.000 por año', rel:['costos-var','uai']},
+'costos-var':{t:'Costos variables',
+ dato:'El cuero cuesta en promedio $50 por prenda y el resto de los costos de producción $80 por unidad.',
+ que:'El cuero lo provee la propia curtiembre, pero igual es un costo del proyecto: ese cuero tiene un costo de producción que antes no existía.',
+ f:['\\text{CV} = Q \\times (\\text{cuero} + \\text{otros})'], s:['\\text{CV} = 8.000 \\times (50 + 80) = 8.000 \\times 130'],
+ r:'1.040.000 por año', rel:['ahorro-cuero','uai']},
+'ahorro-cuero':{t:'Ahorro de costos en la curtiembre (efecto colateral positivo)',
+ dato:'El aumento en la cantidad de cueros curados generaría un ahorro en costos de $30.000 anuales en la curtiembre.',
+ que:'Al producir más cueros, la curtiembre gana escala y baja sus costos. Ese ahorro existe solo si se hace el proyecto: es incremental y suma.',
+ r:'+30.000 por año', rel:['costos-var','uai']},
+habilitaciones:{t:'Gastos de habilitación en el año 0',
+ dato:'Gastos generales (habilitaciones, etc.) por $60.000 al inicio.',
+ que:'No son activos: se deducen como gasto en el año en que se incurren. Como la firma tiene otras ganancias y el impuesto se paga en el mismo ejercicio, el ahorro de impuestos ocurre en el año 0.',
+ f:['\\text{Ahorro fiscal} = \\text{Gasto} \\times T \\qquad \\text{Flujo neto} = \\text{Gasto} \\times (1-T)'],
+ s:['\\text{Ahorro fiscal} = 60.000 \\times 0{,}30 = 18.000','\\text{Flujo neto} = -60.000 + 18.000'],
+ r:'−42.000 en el año 0', rel:['feo','capex']},
+amortizacion:{t:'Amortizaciones',
+ dato:'Refacciones $500.000 (amortiza en 10 años). Maquinaria $350.000 (amortiza en 5 años).',
+ que:'Cada activo amortiza según su propia vida útil contable. La amortización no es salida de caja, pero baja el impuesto. Se resta para llegar al resultado y se vuelve a sumar.',
+ f:['\\text{Amort} = \\dfrac{\\text{Refacciones}}{10} + \\dfrac{\\text{Maquinaria}}{5}'],
+ s:['\\text{Amort} = \\dfrac{500.000}{10} + \\dfrac{350.000}{5} = 50.000 + 70.000'],
+ r:'120.000 por año', rel:['uai','recupero']},
+uai:{t:'Resultado antes de impuestos, impuesto y resultado neto',
+ f:['\\text{UAI} = \\text{Ventas} - \\text{CV} - \\text{CF} + \\text{Ahorro} - \\text{Publicidad} - \\text{Amort}','\\text{Impuesto} = \\text{UAI} \\times T'],
+ s:['\\text{UAI} = 2.000.000 - 1.040.000 - 200.000 + 30.000 - 200.000 - 120.000 = 470.000','\\text{Impuesto} = 470.000 \\times 0{,}30 = 141.000','\\text{Resultado neto} = 470.000 - 141.000 = 329.000'],
+ r:'Resultado neto 329.000 por año', rel:['amortizacion','feo']},
+feo:{t:'Flujo operativo (FEO)',
+ que:'Se vuelve a sumar la amortización, porque no fue salida de caja: ya cumplió su función de bajar el impuesto.',
+ f:['\\text{FEO} = \\text{Resultado neto} + \\text{Amort}'],
+ s:['\\text{FEO}_{1-4} = 329.000 + 120.000 = 449.000','\\text{FEO}_0 = -42.000 \\;(\\text{habilitaciones netas de impuesto})'],
+ r:'449.000 por año', extra:'<p>Forma alternativa: \\((\\text{UAI} + \\text{Amort})(1-T) + \\text{Amort} \\times T = 590.000 \\times 0{,}7 + 36.000 = 449.000\\).</p>',
+ rel:['uai','fcf']},
+capex:{t:'Inversión en activos fijos (CAPEX)',
+ dato:'Refacciones sobre un inmueble $500.000 y maquinaria $350.000, al inicio.',
+ f:['\\text{CAPEX}_0 = \\text{Refacciones} + \\text{Maquinaria}'], s:['\\text{CAPEX}_0 = 500.000 + 350.000'],
+ r:'−850.000 en el año 0',
+ extra:'<p>Inversión inicial total: \\(I_0 = 850.000 + 150.000 + 42.000 = 1.042.000\\).</p>',
+ rel:['recupero','fcf']},
+recupero:{t:'Recupero neto de los activos fijos (año 5)',
+ dato:'Se podrá vender el equipamiento en $230.000 al finalizar el proyecto. Las refacciones no tienen valor de venta.',
+ que:'Por la convención de la guía, los activos amortizan los 4 años y se dan de baja en el período siguiente. Se compara el precio de venta con el valor libros de cada activo: la ganancia paga impuesto y la pérdida genera ahorro fiscal.',
+ tabla:[['','Maquinaria','Refacciones','Total'],['Valor de origen',350000,500000,850000],['Amortización acumulada (4 años)',-280000,-200000,-480000],['Valor libros',70000,300000,370000],['Precio de venta',230000,0,230000],['Resultado',160000,-300000,-140000],['Impuesto (−) / ahorro (+)',-48000,90000,42000],['Flujo neto',182000,90000,272000]],
+ f:['\\text{Flujo} = \\text{Precio} - (\\text{Precio} - \\text{VL}) \\times T'],
+ s:['\\text{Maquinaria: } 230.000 - (230.000 - 70.000) \\times 0{,}30 = 230.000 - 48.000 = 182.000','\\text{Refacciones: } 0 - (0 - 300.000) \\times 0{,}30 = 90.000'],
+ r:'+272.000 en el año 5',
+ extra:'<p>Las refacciones no se venden, pero darlas de baja con valor libros de 300.000 genera una pérdida deducible: el ahorro de impuestos es caja para el proyecto.</p>',
+ rel:['amortizacion','capex','fcf']},
+ctn:{t:'Capital de trabajo',
+ dato:'Inversión en capital de trabajo de $150.000 al inicio, que podría reducirse a $120.000 en el primer año del proyecto.',
+ que:'El flujo es −ΔCTN. En el año 1 el saldo baja: se liberan 30.000 de caja. Al terminar el proyecto (año 4) el saldo vuelve a cero y se recupera todo.',
+ f:['\\text{Flujo CTN}_t = -(\\text{CTN}_t - \\text{CTN}_{t-1})'],
+ s:['\\text{Flujo}_0 = -(150.000 - 0) = -150.000','\\text{Flujo}_1 = -(120.000 - 150.000) = +30.000','\\text{Flujo}_4 = -(0 - 120.000) = +120.000'],
+ r:'−150.000 · +30.000 · 0 · 0 · +120.000', rel:['fcf']},
+fcf:{t:'Flujo de fondos libre (FCF)',
+ que:'Se suman, año por año, el flujo operativo y los flujos de inversión.',
+ f:['\\text{FCF}_t = \\text{FEO}_t - \\text{CAPEX}_t - \\Delta\\text{CTN}_t + \\text{Recupero}_t'],
+ s:['\\text{FCF}_0 = -42.000 - 850.000 - 150.000 = -1.042.000','\\text{FCF}_1 = 449.000 + 30.000 = 479.000','\\text{FCF}_2 = \\text{FCF}_3 = 449.000','\\text{FCF}_4 = 449.000 + 120.000 = 569.000','\\text{FCF}_5 = 272.000'],
+ r:'−1.042.000 · 479.000 · 449.000 · 449.000 · 569.000 · 272.000', rel:['feo','capex','ctn','recupero','descuento']},
+descuento:{t:'Factor de descuento y valor presente',
+ dato:'Costo del capital de la firma: 14,36842%.',
+ que:'Se descuenta al WACC porque el flujo es del proyecto completo (FCFF), no del accionista. La rentabilidad pretendida por los accionistas (17,5%) no se usa acá.',
+ f:['\\text{VP}_t = \\dfrac{\\text{FCF}_t}{(1+\\text{WACC})^t}'],
+ s:['\\text{VP}_1 = \\dfrac{479.000}{1{,}1437} = 418.822','\\text{VP}_2 = \\dfrac{449.000}{1{,}3080} = 343.269','\\text{VP}_3 = \\dfrac{449.000}{1{,}4960} = 300.143','\\text{VP}_4 = \\dfrac{569.000}{1{,}7109} = 332.574','\\text{VP}_5 = \\dfrac{272.000}{1{,}9567} = 139.008'],
+ r:'Suma VP años 1 a 5 = 1.533.814', extra:'<p>Los valores presentes se muestran redondeados; sumados con todos sus decimales dan 1.533.814 (con los redondeados da 1.533.816).</p>', rel:['van','ir','payback-desc']},
+van:{t:'Valor actual neto (VAN)',
+ que:'Es la suma de todos los flujos descontados, incluida la inversión inicial.',
+ f:['\\text{VAN} = \\sum_{t=0}^{5} \\dfrac{\\text{FCF}_t}{(1+\\text{WACC})^t}'],
+ s:['\\text{VAN} = -1.042.000 + 418.822 + 343.269 + 300.143 + 332.574 + 139.008'],
+ r:'VAN = 491.814 → se acepta', rel:['descuento','ir','decision','valor-con-proyecto']},
+ir:{t:'Índice de rentabilidad (IR)',
+ que:'Cuánto valor presente genera cada peso invertido. Si el VAN es positivo, el IR es mayor a 1.',
+ f:['\\text{IR} = \\dfrac{\\sum_{t=1}^{5} \\text{VP}_t}{I_0}'],
+ s:['\\text{IR} = \\dfrac{418.822 + 343.269 + 300.143 + 332.574 + 139.008}{1.042.000} = \\dfrac{1.533.814}{1.042.000}'],
+ r:'IR = 1,472',
+ extra:'<p>Por cada $1 invertido, el proyecto devuelve $1,472 en valor presente: gana $0,472 por encima del costo del capital.</p>',
+ rel:['van']},
+tir:{t:'Tasa interna de retorno (TIR)',
+ que:'La tasa que hace cero el VAN. Se busca por prueba y error o con Excel.',
+ f:['0 = \\sum_{t=0}^{5} \\dfrac{\\text{FCF}_t}{(1+\\text{TIR})^t}'],
+ s:['0 = -1.042.000 + \\dfrac{479.000}{1{,}3354} + \\dfrac{449.000}{1{,}3354^2} + \\dfrac{449.000}{1{,}3354^3} + \\dfrac{569.000}{1{,}3354^4} + \\dfrac{272.000}{1{,}3354^5}'],
+ r:'TIR = 33,54% > 14,368%', rel:['van']},
+payback:{t:'Payback simple',
+ que:'Se acumulan los flujos sin descontar hasta que el acumulado cambia de signo.',
+ tabla:[['Año',0,1,2,3],['FCF',-1042000,479000,449000,449000],['Acumulado',-1042000,-563000,-114000,335000]],
+ f:['\\text{Payback} = (t-1) + \\dfrac{\\left|\\text{Acumulado}_{t-1}\\right|}{\\text{FCF}_t}'],
+ s:['\\text{Payback} = 2 + \\dfrac{114.000}{449.000} = 2 + 0{,}2539 \\text{ años}','0{,}2539 \\times 12 = 3{,}05 \\text{ meses}'],
+ r:'2 años y 4 meses',
+ extra:'<p>Al final del mes 3 todavía falta un poco por recuperar (0,05 de mes); la inversión se termina de recuperar en el transcurso del mes 4.</p>',
+ rel:['fcf','payback-desc']},
+'payback-desc':{t:'Payback descontado',
+ que:'Igual que el simple, pero con los flujos descontados. Siempre es más largo.',
+ tabla:[['Año',0,1,2,3],['VP del FCF',-1042000,418822,343269,300143],['VP acumulado',-1042000,-623178,-279909,20233]],
+ f:['\\text{Payback desc.} = (t-1) + \\dfrac{\\left|\\text{VP acum.}_{t-1}\\right|}{\\text{VP}_t}'],
+ s:['\\text{Payback desc.} = 2 + \\dfrac{279.909}{300.143} = 2 + 0{,}9326 \\text{ años}','0{,}9326 \\times 12 = 11{,}19 \\text{ meses}'],
+ r:'3 años (2 años, 11 meses y días)',
+ extra:'<p>Con VAN positivo se cumple siempre: payback simple < payback descontado < duración del proyecto. Acá, 2 años y 4 meses < 3 años < 5 años.</p>',
+ rel:['descuento','payback']},
+decision:{t:'b) ¿Invertir el excedente o repartirlo entre los accionistas?',
+ que:'Repartir la caja le devuelve al accionista exactamente lo que vale: su VAN es cero. Invertirla en el proyecto le devuelve, en valor presente, más de lo que cuesta: el VAN es 491.814.',
+ html:`<ul>
+  <li>Si se reparte: los accionistas reciben 1.042.000 y la firma sigue valiendo 1.900.000.</li>
+  <li>Si se invierte: la firma pasa a valer 2.391.814. El aumento de 491.814 es riqueza nueva.</li>
+ </ul>
+ <p>El proyecto rinde 33,54% (TIR), más que el 14,368% que exigen los inversores por un riesgo similar. La caja vale más adentro de la firma que en el bolsillo del accionista.</p>`,
+ r:'Llevar a cabo el proyecto', rel:['van','valor-con-proyecto']},
+'valor-con-proyecto':{t:'d) Valor de la firma con el proyecto',
+ que:'El valor de la firma con el proyecto es el valor sin el proyecto más lo que el proyecto agrega, que es su VAN.',
+ f:['V_0^{\\text{con}} = V_0^{\\text{sin}} + \\text{VAN}'],
+ s:['V_0^{\\text{con}} = 1.900.000 + 491.814'],
+ r:'V = 2.391.814', rel:['valor-firma','van']},
+'nota-clave':{t:'Nota sobre la clave de respuestas',
+ que:'Los flujos, el VAN y el valor de la firma coinciden exactamente con la clave. Hay tres diferencias de presentación:',
+ html:`<ul>
+  <li><b>Índice de rentabilidad.</b> La respuesta de la guía dice 1,4725; la cuenta y el Excel dan 1,4720 (1.533.814 / 1.042.000).</li>
+  <li><b>Payback simple.</b> El desarrollo de la guía dice "2 años y 3 meses" y la respuesta, "2 años y 4 meses". Son 3,05 meses: se completan 3 meses y la recuperación ocurre durante el mes 4. Esta página usa 4 meses, como el Excel.</li>
+  <li><b>Recupero de activos fijos.</b> El Excel calcula los dos activos juntos (valor libros 370.000, pérdida 140.000, ahorro 42.000). La guía los separa (182.000 + 90.000). Las dos formas dan 272.000.</li>
+ </ul>`,
+ rel:['ir','payback','recupero']},
+};
+
+const titles = Object.fromEntries(Object.entries(D).map(([k,v])=>[k,v.t]));
+function miniTable(t){
+  const isNum = v => typeof v === 'number';
+  let h = '<div class="tbl mini"><table><thead><tr>'+t[0].map(c=>`<th>${typeof c==='number'?'Año '+c:c}</th>`).join('')+'</tr></thead><tbody>';
+  t.slice(1).forEach(r=>{ h+='<tr>'+r.map((c,i)=> i===0?`<td>${c}</td>`:`<td class="${isNum(c)&&c<0?'neg':''}">${isNum(c)?fmt(c):c}</td>`).join('')+'</tr>'; });
+  return h+'</tbody></table></div>';
+}
+function render(){
+  const id = location.hash.slice(1);
+  const tv = document.getElementById('view-tabla'), dv = document.getElementById('view-det');
+  if (!id || !D[id]) {
+    tv.hidden=false; dv.hidden=true;
+    const anchor = id && document.getElementById(id);
+    if (anchor) anchor.scrollIntoView(); else window.scrollTo(0,0);
+    return;
+  }
+  const d = D[id];
+  let h = `<p class="where">Caso Torredo S.A. · detalle del cálculo</p><h1>${d.t}</h1>`;
+  if (d.dato) h += `<div class="box dato"><span class="lbl">Dato del enunciado</span>${d.dato}</div>`;
+  if (d.que) h += `<p>${d.que}</p>`;
+  if (d.tabla) h += miniTable(d.tabla);
+  if (d.f) h += `<h3>Fórmula</h3><div class="box">${d.f.map(x=>`\\[${x}\\]`).join('')}</div>`;
+  if (d.s) h += `<h3>Reemplazando</h3><div class="box">${d.s.map(x=>`<div class="step">\\[${x}\\]</div>`).join('')}</div>`;
+  if (d.html) h += d.html;
+  if (d.r) h += `<div class="answer"><span class="k">Resultado</span><span class="v">${d.r}</span></div>`;
+  if (d.extra) h += d.extra;
+  if (d.rel) h += `<h3>Relacionado</h3><div class="related">${d.rel.map(r=>`<a class="calc" href="#${r}">${titles[r]}</a>`).join('')}</div>`;
+  document.getElementById('det').innerHTML = h;
+  tv.hidden=true; dv.hidden=false; window.scrollTo(0,0);
+  typeset(document.getElementById('det'));
+}
+function typeset(el){
+  if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetClear && MathJax.typesetClear([el]); MathJax.typesetPromise([el]).catch(()=>{}); }
+  else setTimeout(()=>typeset(el), 150);
+}
+window.addEventListener('hashchange', render);
+render();
+typeset(document.getElementById('view-tabla'));
+</script>
+</body>
+</html>

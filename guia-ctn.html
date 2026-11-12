@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Guía Capital de Trabajo Neto</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<script>
+window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] }, svg: { fontCache: 'global' }, startup: { typeset: false } };
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.min.js"></script>
+<style>
+/* Layout: una columna académica; tabla ancha con scroll propio; vistas de detalle por hash */
+:root{
+  --bg:#ffffff; --fg:#14213d; --muted:#5b6782; --line:#d7deea; --soft:#f2f5fb;
+  --accent:#1f4e9c; --link:#1f4e9c; --linkbg:#e6eefb; --neg:#a3301f; --total:#eaf0fa;
+  --serif:"STIX Two Text","Cambria","Georgia",serif; --mono:"IBM Plex Mono","Consolas",monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f1524; --fg:#e4e9f4; --muted:#9aa6c0; --line:#2a3550; --soft:#161f33;
+  --accent:#8db4f5; --link:#9cc0ff; --linkbg:#1c2a48; --neg:#f09a8a; --total:#1a2540; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f1524; --fg:#e4e9f4; --muted:#9aa6c0; --line:#2a3550; --soft:#161f33;
+  --accent:#8db4f5; --link:#9cc0ff; --linkbg:#1c2a48; --neg:#f09a8a; --total:#1a2540; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--serif);font-size:17px;line-height:1.5}
+.wrap{max-width:1040px;margin:0 auto;padding-block:28px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header .eyebrow{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+h1{font-size:34px;margin:4px 0 6px;font-weight:700;text-wrap:balance}
+h2{font-size:23px;margin:36px 0 10px;text-wrap:balance}
+h3{font-size:18px;margin:22px 0 6px}
+p{margin:0 0 12px;max-width:68ch}
+.lead{color:var(--muted)}
+.hint{display:inline-flex;gap:8px;align-items:center;font-size:15px;color:var(--muted);margin:6px 0 14px}
+.hint .chip{font-family:var(--mono);font-size:13px;background:var(--linkbg);color:var(--link);border-bottom:1.5px solid var(--link);padding:1px 6px;border-radius:3px}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:4px}
+table{border-collapse:collapse;width:100%;min-width:760px;font-variant-numeric:tabular-nums}
+th,td{padding:7px 12px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+th:first-child,td:first-child{text-align:left;white-space:normal;min-width:220px}
+thead th{background:var(--soft);font-weight:600;font-size:15px;border-bottom:2px solid var(--accent)}
+td{font-family:var(--mono);font-size:14.5px}
+td:first-child{font-family:var(--serif);font-size:16px}
+tr.sec td{background:var(--soft);font-family:var(--serif);font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding-top:12px}
+tr.sub td{font-weight:600}
+tr.sub td:first-child{font-weight:700}
+tr.tot td{background:var(--total);font-weight:600;border-top:2px solid var(--accent);border-bottom:2px solid var(--accent)}
+.neg{color:var(--neg)}
+.dash{color:var(--muted)}
+a.calc{color:var(--link);background:var(--linkbg);text-decoration:none;border-bottom:1.5px solid var(--link);padding:1px 5px;border-radius:3px}
+a.calc:hover,a.calc:focus-visible{background:var(--link);color:var(--bg);outline:none}
+a.calc.neg{color:var(--neg);border-bottom-color:var(--neg)}
+a.calc.neg:hover{background:var(--neg);color:var(--bg)}
+.results{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:8px}
+.res{border:1px solid var(--line);border-top:3px solid var(--accent);padding:12px 14px;text-decoration:none;color:var(--fg);display:block}
+.res:hover,.res:focus-visible{background:var(--linkbg);outline:none}
+.res .k{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.res .v{font-family:var(--mono);font-size:22px;color:var(--link);margin-top:4px}
+.res .s{font-size:14px;color:var(--muted)}
+.notes{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.notes > div{min-width:0}
+ul{margin:0 0 12px;padding-left:20px} li{margin-bottom:6px;max-width:66ch}
+.mono{font-family:var(--mono);font-size:.9em}
+/* Detalle */
+.back{display:inline-flex;align-items:center;gap:6px;font-size:15px;color:var(--link);text-decoration:none;border:1px solid var(--line);padding:6px 12px;border-radius:4px}
+.back:hover,.back:focus-visible{background:var(--linkbg);outline:none}
+.det{max-width:760px}
+.det .where{font-size:14px;color:var(--muted);margin-top:14px}
+.box{background:var(--soft);border-left:3px solid var(--accent);padding:14px 18px;margin:12px 0 16px;overflow-x:auto}
+.box.dato{border-left-color:var(--muted);font-style:italic}
+.box .lbl{font-style:normal;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px}
+.step{margin:4px 0}
+.answer{display:flex;flex-wrap:wrap;gap:10px;align-items:baseline;border:2px solid var(--accent);padding:10px 16px;margin:8px 0 18px}
+.answer .k{font-size:14px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.answer .v{font-family:var(--mono);font-size:22px;color:var(--accent)}
+.related{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.related a{font-size:14px}
+mjx-container{max-width:100%;overflow-x:auto;overflow-y:hidden}
+mjx-container[display="true"]{margin:6px 0!important}
+.mini{min-width:0;margin:6px 0 14px}
+.mini table{min-width:520px}
+nav.toc{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 4px}
+nav.toc a{font-size:14px;color:var(--link);text-decoration:none;border:1px solid var(--line);padding:4px 10px;border-radius:4px}
+nav.toc a:hover{background:var(--linkbg)}
+.chain{display:flex;flex-wrap:wrap;align-items:stretch;gap:8px;margin-top:8px}
+.chain .res{flex:1 1 130px}
+.chain .arr{align-self:center;color:var(--muted);font-size:20px}
+.callout{border:1px solid var(--line);border-left:4px solid var(--neg);padding:12px 16px;margin:16px 0}
+.callout b{color:var(--neg)}
+.results.r3{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media (max-width:720px){.results{grid-template-columns:1fr 1fr}.notes{grid-template-columns:1fr}h1{font-size:28px}}
+@media (prefers-reduced-motion:no-preference){a,.res{transition:background .15s,color .15s}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <section id="view-tabla">
+    <header>
+      <div class="eyebrow">Finanzas de Empresa · Guía de Capital de Trabajo Neto</div>
+      <h1>Capital de trabajo neto: ejercicios 2 y 3</h1>
+      <p class="lead">Ciclos, saldos de capital de trabajo y su efecto en el flujo de fondos. Año de 365 días. Cifras en pesos.</p>
+      <div class="hint"><span class="chip">1.234</span> Los números resaltados requieren un cálculo. Hacé click para ver el detalle paso a paso.</div>
+      <nav class="toc">
+        <a href="#sec-marco">Marco</a><a href="#sec-ej2">Ejercicio 2</a><a href="#sec-ej3">Ejercicio 3: RamaBella</a><a href="#sec-res3">Resultados RamaBella</a>
+      </nav>
+    </header>
+
+    <h2 id="sec-marco">La idea en una línea</h2>
+    <div class="callout" style="border-left-color:var(--link)"><b style="color:var(--link)">El capital de trabajo inmoviliza dinero.</b> Lo que entra al flujo de fondos no es el saldo sino su variación, con signo cambiado: si el CTN sube, sale caja; si baja, entra. Ver las <a class="calc" href="#formulas">fórmulas base</a>.</div>
+
+    <h2 id="sec-ej2">Ejercicio 2: ciclos y flujos de CTN</h2>
+    <p class="lead">Inventario de 45 días sobre el costo del año, proveedores a 60 días sobre las compras, cobro a 30, 60 y 90 días. En el año 4 el CTN es cero.</p>
+    <div class="results r3" style="grid-template-columns:repeat(2,minmax(0,1fr))">
+      <a class="res" href="#co1"><div class="k">a) Ciclo operativo, año 1</div><div class="v">75 días</div><div class="s">inventario + cobranza</div></a>
+      <a class="res" href="#cce2"><div class="k">b) Ciclo de efectivo, año 2</div><div class="v">45 días</div><div class="s">ciclo operativo − pago</div></a>
+    </div>
+    <div class="tbl" style="margin-top:16px">
+    <table>
+      <thead><tr><th>c) Concepto</th><th>Año 0</th><th>Año 1</th><th>Año 2</th><th>Año 3</th><th>Año 4</th></tr></thead>
+      <tbody id="tb2"></tbody>
+    </table>
+    </div>
+
+    <h2 id="sec-ej3">Ejercicio 3: RamaBella</h2>
+    <p class="lead">Lanzamiento con efecto sinergia sobre Castro Now. Inventario de 70 días sobre el costo del año siguiente, proveedores a 15 días (la primera compra al contado), cobro a 30 días. WACC 8%, alícuota 35%.</p>
+    <div class="tbl">
+    <table>
+      <thead><tr><th>Concepto</th><th>Año 0</th><th>Año 1</th><th>Año 2</th><th>Año 3</th><th>Año 4</th><th>Año 5</th></tr></thead>
+      <tbody id="tb3"></tbody>
+    </table>
+    </div>
+
+    <h2 id="sec-res3">Resultados RamaBella</h2>
+    <div class="results r3">
+      <a class="res" href="#capital"><div class="k">b) Capital invertido inicial</div><div class="v">783.424,66</div><div class="s">ver tabla para cada año</div></a>
+      <a class="res" href="#cargo"><div class="k">c) Retorno mínimo año 1</div><div class="v">56.000,00</div><div class="s">8% × 700.000</div></a>
+      <a class="res" href="#van"><div class="k">d) VAN al 8%</div><div class="v">−145.996,65</div><div class="s">se rechaza</div></a>
+    </div>
+    <div class="callout"><b>Diferencia con la clave.</b> La clave informa un flujo de 82.808,22 en el año 5 y un VAN de −135.787,90. Ver <a class="calc" href="#nota-clave">por qué el inventario perdido se cuenta una sola vez</a>.</div>
+  </section>
+
+  <section id="view-det" hidden>
+    <a class="back" href="#tabla">← Volver a la tabla</a>
+    <div class="det" id="det"></div>
+  </section>
+</div>
+
+<script>
+const fmt = n => n === null ? '' : (n<0?'−':'') + Math.abs(n).toLocaleString('es-AR',{minimumFractionDigits:2,maximumFractionDigits:2});
+const S = 'sec', B = 'sub', T = 'tot';
+const rows2 = [
+  ['Datos', null, null, S],
+  ['Ventas', [null,100000,150000,250000,40000], null],
+  ['Costo', [null,56000,84000,140000,22400], null],
+  ['Días de cobro', [null,'30','60','90','—'], null],
+  ['Saldos de capital de trabajo', null, null, S],
+  ['Cuentas por cobrar', [0,8219.18,24657.53,61643.84,0], {1:'cxc2',2:'cxc2',3:'cxc2'}],
+  ['Inventarios', [0,6904.11,10356.16,17260.27,0], {1:'inv2',2:'inv2',3:'inv2'}],
+  ['Compras', [null,62904.11,87452.05,146904.11,null], 'compras2'],
+  ['Cuentas por pagar', [0,10340.40,14375.68,24148.62,0], {1:'cxp2',2:'cxp2',3:'cxp2'}],
+  ['CTN', [0,4782.89,20638.02,54755.49,0], 'ctn2', B],
+  ['ΔCTN', [0,4782.89,15855.13,34117.47,-54755.49], 'flujo2'],
+  ['Flujo de inversión en CTN (−ΔCTN)', [0,-4782.89,-15855.13,-34117.47,54755.49], 'flujo2', T],
+];
+const rows3 = [
+  ['Resultado', null, null, S],
+  ['Ventas RamaBella (15.000 × $50)', [null,750000,750000,750000,750000,null], 'ventas3'],
+  ['Ventas Castro Now, sinergia (5.000 × $15)', [null,75000,75000,75000,75000,null], 'ventas3'],
+  ['Costos variables', [null,-435000,-435000,-435000,-435000,null], 'ventas3'],
+  ['Costos fijos', [null,-200000,-200000,-200000,-200000,null]],
+  ['Gastos operativos (15% ventas RamaBella)', [null,-112500,-112500,-112500,-112500,null], 'ventas3'],
+  ['Depreciación', [null,-70000,-70000,-70000,-70000,null], 'dep3'],
+  ['Quebranto inventario remanente', [null,null,null,null,-15000,null], {4:'quebranto'}],
+  ['Resultado venta maquinaria', [null,null,null,null,80000,null], {4:'venta3'}],
+  ['Resultado antes de impuestos', [null,7500,7500,7500,72500,null], 'imp3', B],
+  ['Impuesto (35%)', [null,-2625,-2625,-2625,-25375,null], 'imp3'],
+  ['Resultado neto', [null,4875,4875,4875,47125,null], 'imp3', B],
+  ['Del resultado a la caja', null, null, S],
+  ['+ Depreciación', [null,70000,70000,70000,70000,null], 'dep3'],
+  ['+ Valor libros maquinaria vendida', [null,null,null,null,420000,null], {4:'venta3'}],
+  ['− CAPEX', [-700000,null,null,null,null,null]],
+  ['Saldo de CTN', [83424.66,125136.99,125136.99,125136.99,67808.22,0], 'ctn3'],
+  ['−ΔCTN', [-83424.66,-41712.33,0,0,57328.77,67808.22], 'ctn3'],
+  ['Free Cash Flow', [-783424.66,33162.67,74875,74875,594453.77,67808.22], {0:'fcf3',1:'fcf3',2:'fcf3',3:'fcf3',4:'caja4',5:'nota-clave'}, T],
+  ['Valuación', null, null, S],
+  ['Capital invertido (fin de año)', [783424.66,755136.99,685136.99,615136.99,487808.22,0], 'capital', B],
+  ['Factor (1,08)^−t', ['1,0000','0,9259','0,8573','0,7938','0,7350','0,6806'], 'van'],
+  ['Valor actual del FCF', [-783424.66,30706.18,64193.24,59438.19,436941.27,46149.14], 'van'],
+];
+function build(id, rows, ncol){
+  const tb = document.getElementById(id);
+  rows.forEach(([name, vals, link, cls]) => {
+    const tr = document.createElement('tr'); if (cls) tr.className = cls;
+    if (!vals) { tr.innerHTML = `<td colspan="${ncol+1}">${name}</td>`; tb.appendChild(tr); return; }
+    let h = `<td>${name}</td>`;
+    vals.forEach((v,i) => {
+      if (v === null) { h += `<td class="dash">–</td>`; return; }
+      const txt = typeof v === 'string' ? v : fmt(v);
+      const neg = typeof v === 'number' && v < 0 ? ' neg' : '';
+      const l = link && (typeof link === 'string' ? link : link[i]);
+      h += l ? `<td><a class="calc${neg}" href="#${l}">${txt}</a></td>` : `<td class="${neg.trim()}">${txt}</td>`;
+    });
+    tr.innerHTML = h; tb.appendChild(tr);
+  });
+}
+build('tb2', rows2, 5);
+build('tb3', rows3, 6);
+
+const D = {
+formulas:{t:'Fórmulas base del capital de trabajo',
+ que:'Los saldos se calculan al cierre de cada año a partir de los días de rotación. Las cuentas por pagar se calculan sobre las compras, no sobre el costo: si el stock crece, se compra más de lo que se vende.',
+ f:['\\text{CxC}_t = \\text{Ventas}_t \\cdot \\dfrac{\\text{días de cobro}}{365} \\qquad \\text{Inv}_t = \\text{Costo}_t \\cdot \\dfrac{\\text{días de stock}}{365}',
+    '\\text{Compras}_t = \\text{Costo}_t + \\text{Inv}_t - \\text{Inv}_{t-1} \\qquad \\text{CxP}_t = \\text{Compras}_t \\cdot \\dfrac{\\text{días de pago}}{365}',
+    '\\text{CTN}_t = \\text{CxC}_t + \\text{Inv}_t - \\text{CxP}_t \\qquad \\text{Flujo}_t = -(\\text{CTN}_t - \\text{CTN}_{t-1})'],
+ html:'<div class="box dato"><span class="lbl">Error frecuente</span>Poner el saldo de CTN como flujo de cada año. El dinero se inmoviliza una sola vez; en los años siguientes solo se invierte o se recupera la diferencia.</div>',
+ rel:['co1','ctn2','ctn3']},
+co1:{t:'a) Ciclo operativo del año 1',
+ dato:'Inventario de 45 días; cobro a 30 días en el año 1.',
+ que:'Es el tiempo que pasa desde que entra la mercadería hasta que se cobra la venta: primero está en stock y después es un crédito a cobrar.',
+ f:['\\text{CO} = \\text{días de inventario} + \\text{días de cobro}'],
+ s:['\\text{CO}_1 = 45 + 30'],
+ r:'75 días', rel:['cce2']},
+cce2:{t:'b) Ciclo de conversión de efectivo del año 2',
+ dato:'Inventario de 45 días; cobro a 60 días en el año 2; pago a proveedores a 60 días.',
+ que:'Del ciclo operativo se descuenta el plazo que financian los proveedores. Lo que queda es el tiempo que la empresa tiene que financiar con fondos propios o de terceros.',
+ f:['\\text{CCE} = \\text{días de inventario} + \\text{días de cobro} - \\text{días de pago}'],
+ s:['\\text{CCE}_2 = 45 + 60 - 60'],
+ r:'45 días',
+ extra:'<p>El ciclo operativo del año 2 es de 105 días: los proveedores financian 60 y la empresa los otros 45.</p>',
+ rel:['co1','ctn2']},
+cxc2:{t:'Cuentas por cobrar (ejercicio 2)',
+ que:'El plazo de cobro se alarga cada año: 30, 60 y 90 días. En el año 4 el CTN es cero.',
+ f:['\\text{CxC}_t = \\text{Ventas}_t \\cdot \\dfrac{\\text{días}_t}{365}'],
+ s:['\\text{CxC}_1 = 100.000 \\cdot \\dfrac{30}{365} = 8.219{,}18','\\text{CxC}_2 = 150.000 \\cdot \\dfrac{60}{365} = 24.657{,}53','\\text{CxC}_3 = 250.000 \\cdot \\dfrac{90}{365} = 61.643{,}84'],
+ r:'8.219,18 · 24.657,53 · 61.643,84', rel:['inv2','ctn2']},
+inv2:{t:'Inventarios (ejercicio 2)',
+ dato:'45 días, calculado sobre el costo proyectado del año.',
+ que:'El enunciado dice "costo del año", así que el inventario de cada año se calcula sobre el costo de ese mismo año y no hay inventario en el año 0. (Cuando la cátedra quiere que se calcule sobre el año siguiente, lo aclara, como en RamaBella.)',
+ f:['\\text{Inv}_t = \\text{Costo}_t \\cdot \\dfrac{45}{365}'],
+ s:['\\text{Inv}_1 = 56.000 \\cdot \\dfrac{45}{365} = 6.904{,}11','\\text{Inv}_2 = 84.000 \\cdot \\dfrac{45}{365} = 10.356{,}16','\\text{Inv}_3 = 140.000 \\cdot \\dfrac{45}{365} = 17.260{,}27'],
+ r:'6.904,11 · 10.356,16 · 17.260,27', rel:['compras2','ctn2']},
+compras2:{t:'Compras (ejercicio 2)',
+ que:'Sale de la identidad del inventario: lo que hay al final es lo que había al inicio, más lo que se compró, menos lo que se vendió.',
+ f:['\\text{Inv}_{t} = \\text{Inv}_{t-1} + \\text{Compras}_t - \\text{Costo}_t \\;\\Rightarrow\\; \\text{Compras}_t = \\text{Costo}_t + \\text{Inv}_t - \\text{Inv}_{t-1}'],
+ s:['\\text{Compras}_1 = 56.000 + 6.904{,}11 - 0 = 62.904{,}11','\\text{Compras}_2 = 84.000 + 10.356{,}16 - 6.904{,}11 = 87.452{,}05','\\text{Compras}_3 = 140.000 + 17.260{,}27 - 10.356{,}16 = 146.904{,}11'],
+ r:'62.904,11 · 87.452,05 · 146.904,11', rel:['inv2','cxp2']},
+cxp2:{t:'Cuentas por pagar (ejercicio 2)',
+ dato:'Los proveedores cobran a 60 días.',
+ f:['\\text{CxP}_t = \\text{Compras}_t \\cdot \\dfrac{60}{365}'],
+ s:['\\text{CxP}_1 = 62.904{,}11 \\cdot \\dfrac{60}{365} = 10.340{,}40','\\text{CxP}_2 = 87.452{,}05 \\cdot \\dfrac{60}{365} = 14.375{,}68','\\text{CxP}_3 = 146.904{,}11 \\cdot \\dfrac{60}{365} = 24.148{,}62'],
+ r:'10.340,40 · 14.375,68 · 24.148,62', rel:['compras2','ctn2']},
+ctn2:{t:'Capital de trabajo neto (ejercicio 2)',
+ f:['\\text{CTN}_t = \\text{CxC}_t + \\text{Inv}_t - \\text{CxP}_t'],
+ s:['\\text{CTN}_1 = 8.219{,}18 + 6.904{,}11 - 10.340{,}40 = 4.782{,}89','\\text{CTN}_2 = 24.657{,}53 + 10.356{,}16 - 14.375{,}68 = 20.638{,}02','\\text{CTN}_3 = 61.643{,}84 + 17.260{,}27 - 24.148{,}62 = 54.755{,}49'],
+ r:'4.782,89 · 20.638,02 · 54.755,49',
+ extra:'<p>El CTN se multiplica por más de 11 entre el año 1 y el 3: crece el volumen y el plazo de cobro se triplica. Darles más crédito a los clientes es una decisión de inversión, no solo comercial.</p>',
+ rel:['cxc2','inv2','cxp2','flujo2']},
+flujo2:{t:'Flujo de inversión en CTN (ejercicio 2)',
+ que:'El flujo es la variación del saldo, con signo cambiado. En el año 4 el CTN vuelve a cero y se recupera todo lo invertido.',
+ f:['\\text{Flujo}_t = -(\\text{CTN}_t - \\text{CTN}_{t-1})'],
+ s:['\\text{Flujo}_1 = -(4.782{,}89 - 0) = -4.782{,}89','\\text{Flujo}_2 = -(20.638{,}02 - 4.782{,}89) = -15.855{,}13','\\text{Flujo}_3 = -(54.755{,}49 - 20.638{,}02) = -34.117{,}47','\\text{Flujo}_4 = -(0 - 54.755{,}49) = +54.755{,}49'],
+ r:'0 · −4.782,89 · −15.855,13 · −34.117,47 · +54.755,49',
+ extra:'<p>Los flujos suman cero: el costo del capital de trabajo no es el monto sino el valor tiempo del dinero inmovilizado.</p>',
+ rel:['ctn2']},
+ventas3:{t:'Ventas y costos de RamaBella',
+ dato:'RamaBella: 15.000 unidades a $50, costo variable $25. Castro Now (incremental por sinergia): 5.000 unidades a $15, costo variable $12. Gastos operativos: 15% de las ventas de RamaBella.',
+ que:'Solo se computan las ventas que agrega el proyecto. Las de Castro Now que da el enunciado son las incrementales por sinergia.',
+ f:['\\text{Ventas} = Q_{RB} P_{RB} + Q_{CN} P_{CN} \\qquad \\text{CV} = Q_{RB} c_{RB} + Q_{CN} c_{CN}'],
+ s:['\\text{Ventas} = 15.000 \\cdot 50 + 5.000 \\cdot 15 = 750.000 + 75.000 = 825.000','\\text{CV} = 15.000 \\cdot 25 + 5.000 \\cdot 12 = 375.000 + 60.000 = 435.000','\\text{Gastos operativos} = 0{,}15 \\cdot 750.000 = 112.500'],
+ r:'Ventas 825.000 · CV 435.000', rel:['imp3','ctn3']},
+dep3:{t:'Depreciación',
+ dato:'Maquinaria de $700.000 con vida útil de 10 años.',
+ f:['\\text{Dep} = \\dfrac{700.000}{10}'], s:['\\text{Dep} = 70.000'],
+ r:'70.000 por año', extra:'<p>No es salida de caja: baja el impuesto y se vuelve a sumar en el flujo.</p>', rel:['imp3','venta3']},
+quebranto:{t:'Quebranto por el inventario remanente',
+ dato:'Al finalizar el año 4 quedan $15.000 en inventarios, que se mandan a pérdida en ese mismo año.',
+ que:'La pérdida baja el resultado imponible del año 4 y genera un ahorro de impuestos. Ese inventario ya se pagó cuando se compró; al darlo de baja, sale del CTN.',
+ f:['\\text{Ahorro fiscal} = \\text{Quebranto} \\times T'], s:['\\text{Ahorro fiscal} = 15.000 \\times 0{,}35 = 5.250'],
+ r:'−15.000 en el resultado (ahorro fiscal 5.250)', rel:['nota-clave','ctn3']},
+venta3:{t:'Venta de la maquinaria al final del año 4',
+ dato:'La máquina se vende en $500.000 al finalizar el año 4.',
+ que:'Se compara el precio con el valor libros. La ganancia paga impuesto. En el flujo se suma el valor libros porque la ganancia ya está dentro del resultado neto.',
+ f:['\\text{VL}_4 = 700.000 - 4 \\times 70.000 \\qquad \\text{Resultado} = \\text{Precio} - \\text{VL}_4'],
+ s:['\\text{VL}_4 = 420.000','\\text{Resultado} = 500.000 - 420.000 = 80.000','\\text{Recupero neto} = 500.000 - 80.000 \\times 0{,}35 = 472.000 = 420.000 + 80.000 \\times 0{,}65'],
+ r:'+80.000 en el resultado · +420.000 en el flujo', rel:['imp3','fcf3']},
+imp3:{t:'Resultado antes de impuestos, impuesto y resultado neto',
+ f:['\\text{RAI} = \\text{Ventas} - \\text{CV} - \\text{CF} - \\text{Gastos} - \\text{Dep} \\;(\\pm \\text{partidas del año 4})'],
+ s:['\\text{RAI}_{1-3} = 825.000 - 435.000 - 200.000 - 112.500 - 70.000 = 7.500','\\text{RN}_{1-3} = 7.500 \\times 0{,}65 = 4.875',
+    '\\text{RAI}_4 = 7.500 - 15.000 + 80.000 = 72.500 \\;\\Rightarrow\\; \\text{Impuesto} = 25.375 \\;\\Rightarrow\\; \\text{RN}_4 = 47.125'],
+ r:'RN años 1–3: 4.875 · año 4: 47.125', rel:['quebranto','venta3','fcf3']},
+ctn3:{t:'Capital de trabajo de RamaBella',
+ dato:'Inventario de 70 días sobre los costos variables del año en preparación (el siguiente). Proveedores a 15 días; la primera compra es al contado. Cobro a 30 días. Al final del año 4 quedan $15.000 de inventario, que se pierden, y no hay deudas comerciales.',
+ que:'Las compras incluyen el costo fijo: también se adquiere a proveedores. Como el inventario es igual todos los años, en los años 1 a 3 no hay compras de stock nuevo.',
+ tabla:[['','Año 0','Año 1','Año 2','Año 3','Año 4','Año 5'],['Cuentas por cobrar',0,67808.22,67808.22,67808.22,67808.22,0],['Inventarios',83424.66,83424.66,83424.66,83424.66,0,0],['Cuentas por pagar',0,26095.89,26095.89,26095.89,0,0],['CTN',83424.66,125136.99,125136.99,125136.99,67808.22,0],['−ΔCTN',-83424.66,-41712.33,0,0,57328.77,67808.22]],
+ f:['\\text{Inv}_t = \\text{CV}_{t+1} \\cdot \\dfrac{70}{365} \\qquad \\text{CxC}_t = \\text{Ventas}_t \\cdot \\dfrac{30}{365} \\qquad \\text{CxP}_t = (\\text{CV} + \\text{CF} + \\Delta \\text{Inv}) \\cdot \\dfrac{15}{365}'],
+ s:['\\text{Inv}_0 = 435.000 \\cdot \\dfrac{70}{365} = 83.424{,}66 \\quad (\\text{CxP}_0 = 0, \\text{ se paga al contado})',
+    '\\text{CxC}_1 = 825.000 \\cdot \\dfrac{30}{365} = 67.808{,}22 \\qquad \\text{CxP}_1 = 635.000 \\cdot \\dfrac{15}{365} = 26.095{,}89',
+    '\\text{CTN}_1 = 67.808{,}22 + 83.424{,}66 - 26.095{,}89 = 125.136{,}99',
+    '\\text{CTN}_4 = 67.808{,}22 \\quad (\\text{el inventario se dio de baja y no hay deudas})'],
+ r:'Flujos: −83.424,66 · −41.712,33 · 0 · 0 · +57.328,77 · +67.808,22',
+ extra:'<p>En el año 4 el CTN baja de 125.136,99 a 67.808,22. Parte de esa baja son los 15.000 de inventario perdido, que no son caja. Por eso el quebranto <b>no</b> se vuelve a sumar en el flujo: su baja del CTN ya hace ese ajuste.</p>',
+ rel:['quebranto','fcf3','nota-clave']},
+fcf3:{t:'Free Cash Flow de RamaBella',
+ f:['\\text{FCF}_t = \\text{RN}_t + \\text{Dep}_t + \\text{VL vendido}_t - \\text{CAPEX}_t - \\Delta\\text{CTN}_t'],
+ s:['\\text{FCF}_0 = -700.000 - 83.424{,}66 = -783.424{,}66','\\text{FCF}_1 = 4.875 + 70.000 - 41.712{,}33 = 33.162{,}67','\\text{FCF}_2 = \\text{FCF}_3 = 4.875 + 70.000 = 74.875','\\text{FCF}_4 = 47.125 + 70.000 + 420.000 + 57.328{,}77 = 594.453{,}77','\\text{FCF}_5 = 67.808{,}22 \\;(\\text{cobranza de los créditos del año 4})'],
+ r:'−783.424,66 · 33.162,67 · 74.875 · 74.875 · 594.453,77 · 67.808,22', rel:['caja4','van','nota-clave']},
+caja4:{t:'Verificación por caja del año 4',
+ que:'El FCF del año 4 se puede comprobar contando directamente lo que entra y lo que sale de caja.',
+ tabla:[['Concepto','Monto'],['Cobranzas (se cobra el saldo del año 3, queda uno igual)',825000],['Compras del año: 635.000 + (15.000 − 83.424,66)','566.575,34'],['Pagos a proveedores: 566.575,34 + 26.095,89',-592671.23],['Gastos operativos',-112500],['Impuesto',-25375],['Venta de la máquina',500000],['Flujo del año 4',594453.77]],
+ r:'594.453,77, igual que por el método indirecto', rel:['fcf3','nota-clave']},
+capital:{t:'b) Stock de capital invertido',
+ que:'Es lo que los inversores tienen puesto en el proyecto al cierre de cada año: el activo fijo neto de depreciación más el capital de trabajo.',
+ f:['K_t = (700.000 - 70.000\\,t) + \\text{CTN}_t'],
+ s:['K_0 = 700.000 + 83.424{,}66 = 783.424{,}66','K_1 = 630.000 + 125.136{,}99 = 755.136{,}99','K_4 = 420.000 + 67.808{,}22 = 487.808{,}22'],
+ r:'783.424,66 · 755.136,99 · 685.136,99 · 615.136,99 · 487.808,22 · 0',
+ extra:'<p>Como en la clave, en el año 4 la máquina figura por su valor libros antes de venderse al 31/12. La clave informa 502.808,22 en el año 4 porque deja el inventario perdido dentro del CTN (ver la <a class="calc" href="#nota-clave">nota</a>).</p>',
+ rel:['ctn3','cargo']},
+cargo:{t:'c) Retorno mínimo exigido en el año 1',
+ que:'Es el rendimiento que deben recibir en el año 1 quienes pusieron el capital, aplicado a la inversión en maquinaria.',
+ f:['\\text{Cargo de capital}_1 = \\text{WACC} \\cdot \\text{Inversión}'],
+ s:['\\text{Cargo de capital}_1 = 0{,}08 \\cdot 700.000'],
+ r:'56.000',
+ extra:'<p>Con un resultado operativo después de impuestos de 4.875, el proyecto queda muy por debajo de ese piso.</p>',
+ rel:['capital','van']},
+van:{t:'d) VAN al WACC del 8%',
+ f:['\\text{VAN} = \\sum_{t=0}^{5} \\dfrac{\\text{FCF}_t}{1{,}08^t}'],
+ s:['\\text{VAN} = -783.424{,}66 + \\dfrac{33.162{,}67}{1{,}08} + \\dfrac{74.875}{1{,}08^2} + \\dfrac{74.875}{1{,}08^3} + \\dfrac{594.453{,}77}{1{,}08^4} + \\dfrac{67.808{,}22}{1{,}08^5}',
+    '\\text{VAN} = -783.424{,}66 + 30.706{,}18 + 64.193{,}24 + 59.438{,}19 + 436.941{,}27 + 46.149{,}14'],
+ r:'VAN = −145.996,65 → se rechaza',
+ extra:'<p>Con un EBIT de 7.500 sobre ventas de 825.000 (margen del 0,9%), la operación no alcanza a remunerar al 8% un capital de casi 800.000. Ni la sinergia con Castro Now ni la ganancia por la venta de la máquina compensan esa brecha.</p>',
+ rel:['fcf3','nota-clave']},
+'nota-clave':{t:'Diferencia con la clave: el inventario perdido se cuenta una sola vez',
+ que:'La clave informa un FCF de 82.808,22 en el año 5 y un VAN de −135.787,90. La diferencia está en los $15.000 de inventario que se mandan a pérdida.',
+ html:`<ul>
+  <li>La clave deduce el quebranto en el año 4 (ahorro fiscal de 5.250) y lo vuelve a sumar como partida no erogable. Hasta acá, es correcto.</li>
+  <li>Pero además deja esos 15.000 dentro del CTN del año 4 (82.808,22) y los "recupera" en el año 5, como si se vendieran.</li>
+ </ul>
+ <p>El inventario se tiró: en el año 5 solo entra la cobranza de los créditos (67.808,22). Contarlo también como recupero lo cuenta dos veces. Es también la convención de las guías de la cátedra: el capital de trabajo que no se liquida genera una pérdida con ahorro fiscal y no se recupera.</p>`,
+ tabla:[['','Esta resolución','Clave'],['FCF año 4','594.453,77','594.453,77'],['FCF año 5','67.808,22','82.808,22'],['Capital invertido año 4','487.808,22','502.808,22'],['VAN','−145.996,65','−135.787,90']],
+ r:'Diferencia en el VAN: 15.000 / 1,08⁵ = 10.208,75',
+ extra:'<p>La decisión no cambia: el proyecto se rechaza con los dos criterios.</p>',
+ rel:['quebranto','ctn3','caja4','van']},
+};
+
+const titles = Object.fromEntries(Object.entries(D).map(([k,v])=>[k,v.t]));
+function miniTable(t){
+  const isNum = v => typeof v === 'number';
+  let h = '<div class="tbl mini"><table><thead><tr>'+t[0].map(c=>`<th>${c}</th>`).join('')+'</tr></thead><tbody>';
+  t.slice(1).forEach(r=>{ h+='<tr>'+r.map((c,i)=> i===0?`<td>${c}</td>`:`<td class="${isNum(c)&&c<0?'neg':''}">${isNum(c)?fmt(c):c}</td>`).join('')+'</tr>'; });
+  return h+'</tbody></table></div>';
+}
+function render(){
+  const id = location.hash.slice(1);
+  const tv = document.getElementById('view-tabla'), dv = document.getElementById('view-det');
+  if (!id || !D[id]) {
+    tv.hidden=false; dv.hidden=true;
+    const anchor = id && document.getElementById(id);
+    if (anchor) anchor.scrollIntoView(); else window.scrollTo(0,0);
+    return;
+  }
+  const d = D[id];
+  let h = `<p class="where">Guía de Capital de Trabajo Neto · detalle del cálculo</p><h1>${d.t}</h1>`;
+  if (d.dato) h += `<div class="box dato"><span class="lbl">Dato del enunciado</span>${d.dato}</div>`;
+  if (d.que) h += `<p>${d.que}</p>`;
+  if (d.html) h += d.html;
+  if (d.tabla) h += miniTable(d.tabla);
+  if (d.f) h += `<h3>Fórmula</h3><div class="box">${d.f.map(x=>`\\[${x}\\]`).join('')}</div>`;
+  if (d.s) h += `<h3>Reemplazando</h3><div class="box">${d.s.map(x=>`<div class="step">\\[${x}\\]</div>`).join('')}</div>`;
+  if (d.r) h += `<div class="answer"><span class="k">Resultado</span><span class="v">${d.r}</span></div>`;
+  if (d.extra) h += d.extra;
+  if (d.rel) h += `<h3>Relacionado</h3><div class="related">${d.rel.map(r=>`<a class="calc" href="#${r}">${titles[r]}</a>`).join('')}</div>`;
+  document.getElementById('det').innerHTML = h;
+  tv.hidden=true; dv.hidden=false; window.scrollTo(0,0);
+  typeset(document.getElementById('det'));
+}
+function typeset(el){
+  if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetClear && MathJax.typesetClear([el]); MathJax.typesetPromise([el]).catch(()=>{}); }
+  else setTimeout(()=>typeset(el), 150);
+}
+window.addEventListener('hashchange', render);
+render();
+typeset(document.getElementById('view-tabla'));
+</script>
+</body>
+</html>
