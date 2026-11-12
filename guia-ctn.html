@@ -87,6 +87,8 @@ nav.toc a:hover{background:var(--linkbg)}
 .chain .arr{align-self:center;color:var(--muted);font-size:20px}
 .callout{border:1px solid var(--line);border-left:4px solid var(--neg);padding:12px 16px;margin:16px 0}
 .callout b{color:var(--neg)}
+tr.aux td{font-style:italic;color:var(--muted)}
+tr.aux td:first-child{font-size:14px}
 .results.r3{grid-template-columns:repeat(3,minmax(0,1fr))}
 @media (max-width:720px){.results{grid-template-columns:1fr 1fr}.notes{grid-template-columns:1fr}h1{font-size:28px}}
 @media (prefers-reduced-motion:no-preference){a,.res{transition:background .15s,color .15s}}
@@ -154,10 +156,11 @@ const rows2 = [
   ['Ventas', [null,100000,150000,250000,40000], null],
   ['Costo', [null,56000,84000,140000,22400], null],
   ['Días de cobro', [null,'30','60','90','—'], null],
+  ['Cálculo auxiliar (no forma parte del CTN)', null, null, S],
+  ['Compras del año (para calcular cuentas por pagar)', [null,62904.11,87452.05,146904.11,null], 'compras2', 'aux'],
   ['Saldos de capital de trabajo', null, null, S],
   ['Cuentas por cobrar', [0,8219.18,24657.53,61643.84,0], {1:'cxc2',2:'cxc2',3:'cxc2'}],
   ['Inventarios', [0,6904.11,10356.16,17260.27,0], {1:'inv2',2:'inv2',3:'inv2'}],
-  ['Compras', [null,62904.11,87452.05,146904.11,null], 'compras2'],
   ['Cuentas por pagar', [0,10340.40,14375.68,24148.62,0], {1:'cxp2',2:'cxp2',3:'cxp2'}],
   ['CTN', [0,4782.89,20638.02,54755.49,0], 'ctn2', B],
   ['ΔCTN', [0,4782.89,15855.13,34117.47,-54755.49], 'flujo2'],
@@ -241,7 +244,7 @@ inv2:{t:'Inventarios (ejercicio 2)',
  s:['\\text{Inv}_1 = 56.000 \\cdot \\dfrac{45}{365} = 6.904{,}11','\\text{Inv}_2 = 84.000 \\cdot \\dfrac{45}{365} = 10.356{,}16','\\text{Inv}_3 = 140.000 \\cdot \\dfrac{45}{365} = 17.260{,}27'],
  r:'6.904,11 · 10.356,16 · 17.260,27', rel:['compras2','ctn2']},
 compras2:{t:'Compras (ejercicio 2)',
- que:'Sale de la identidad del inventario: lo que hay al final es lo que había al inicio, más lo que se compró, menos lo que se vendió.',
+ que:'Las compras no son un saldo de capital de trabajo sino un flujo: lo que se compró durante el año. No entran al CTN; se calculan solo porque los proveedores financian lo que se compra, no lo que se vende. Salen de la identidad del inventario: lo que hay al final es lo que había al inicio, más lo que se compró, menos lo que se vendió.',
  f:['\\text{Inv}_{t} = \\text{Inv}_{t-1} + \\text{Compras}_t - \\text{Costo}_t \\;\\Rightarrow\\; \\text{Compras}_t = \\text{Costo}_t + \\text{Inv}_t - \\text{Inv}_{t-1}'],
  s:['\\text{Compras}_1 = 56.000 + 6.904{,}11 - 0 = 62.904{,}11','\\text{Compras}_2 = 84.000 + 10.356{,}16 - 6.904{,}11 = 87.452{,}05','\\text{Compras}_3 = 140.000 + 17.260{,}27 - 10.356{,}16 = 146.904{,}11'],
  r:'62.904,11 · 87.452,05 · 146.904,11', rel:['inv2','cxp2']},
